@@ -5,11 +5,11 @@ import { Release, Artist } from '../interfaces/types';
 import ReleaseCard from './ReleaseCard';
 import styles from './Pagination.module.css';
 
-type SortOption = 'titleAZ' | 'artistAZ' | 'genreAZ';
+type SortOption = 'titleAZ' | 'artistAZ' | 'genreAZ' | 'yearDesc';
 
 function ReleasesList() {
   const [releases, setReleases] = useState<Release[]>([]);
-  const [artists, setArtists] = useState<Artist[]>([]); // Add this line
+  const [artists, setArtists] = useState<Artist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,8 +46,9 @@ function ReleasesList() {
       result = result.filter((release) => 
         release.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (typeof release.artist === 'string' 
-          ? release.artist.toLowerCase().includes(searchTerm.toLowerCase())
-          : release.artist.name.toLowerCase().includes(searchTerm.toLowerCase()))
+          ? artists.find(a => a._id === release.artist)?.name.toLowerCase().includes(searchTerm.toLowerCase())
+          : release.artist.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        release.genre.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -57,17 +58,24 @@ function ReleasesList() {
         case 'titleAZ':
           return a.title.localeCompare(b.title);
         case 'artistAZ':
-          return (typeof a.artist === 'string' ? a.artist : a.artist.name)
-            .localeCompare(typeof b.artist === 'string' ? b.artist : b.artist.name);
+          const aName = typeof a.artist === 'string' 
+            ? artists.find(art => art._id === a.artist)?.name || ''
+            : a.artist.name;
+          const bName = typeof b.artist === 'string'
+            ? artists.find(art => art._id === b.artist)?.name || ''
+            : b.artist.name;
+          return aName.localeCompare(bName);
         case 'genreAZ':
           return a.genre.localeCompare(b.genre);
+        case 'yearDesc':
+          return b.year - a.year;
         default:
           return 0;
       }
     });
 
     return result;
-  }, [releases, searchTerm, sortOption]);
+  }, [releases, artists, searchTerm, sortOption]);
 
   // Pagination logic
   const indexOfLastRelease = currentPage * releasesPerPage;
@@ -103,6 +111,7 @@ function ReleasesList() {
                 <option value="titleAZ">Sort by Title A-Z</option>
                 <option value="artistAZ">Sort by Artist A-Z</option>
                 <option value="genreAZ">Sort by Genre A-Z</option>
+                <option value="yearDesc">Sort by Year (Newest First)</option>
               </select>
             </div>
           </div>
@@ -118,16 +127,16 @@ function ReleasesList() {
         </div>
 
         <div className="columns is-multiline">
-        {currentReleases.map((release) => (
-          <div key={release._id} className="column is-one-quarter-desktop is-half-tablet" style={{ display: 'flex' }}>
-            <div className={`box ${styles.releaseBox}`} style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-              <Link to={`/releases/${release._id}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <ReleaseCard release={release} artists={artists} />
-              </Link>
+          {currentReleases.map((release) => (
+            <div key={release._id} className="column is-one-quarter-desktop is-half-tablet" style={{ display: 'flex' }}>
+              <div className={`box ${styles.releaseBox}`} style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                <Link to={`/releases/${release._id}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <ReleaseCard release={release} artists={artists} />
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
         <nav className="pagination is-centered mt-6" role="navigation" aria-label="pagination">
           <button
             className="pagination-previous is-warning"
