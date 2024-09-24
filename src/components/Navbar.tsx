@@ -1,6 +1,5 @@
-// Navbar.tsx
-import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Release } from '../interfaces/types';
 
 interface User {
@@ -13,6 +12,7 @@ interface User {
   uploads?: Release[];
   favorites?: Release[];
 }
+
 interface NavbarProps {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
@@ -33,17 +33,25 @@ const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
         <div className='container'>
           <div className='navbar-brand'>
             <Link to="/" className='navbar-item'>Home</Link>
-            {!user && <Link to="/signup" className='navbar-item'>Signup</Link>}
-            {!user && <Link to="/login" className='navbar-item'>Login</Link>}
-            {user && <Link to="/your-page" className='navbar-item'>Your Page</Link>}
             <Link to="/releases" className='navbar-item'>All Releases</Link>
             <Link to="/artists" className='navbar-item'>All Artists</Link>
-            {user && <Link to="/releases/new" className='navbar-item'>Create Release</Link>}
-            {user && <Link to="/artists/new" className='navbar-item'>Create Artist</Link>}
+            
+            {!user && (
+              <>
+                <Link to="/signup" className='navbar-item'>Signup</Link>
+                <Link to="/login" className='navbar-item'>Login</Link>
+              </>
+            )}
+            
             {user && (
-              <button onClick={logout} className="navbar-item button is-primary is-ghost">
-                Logout
-              </button>
+              <>
+                <Link to={`/user/${user?._id}/profile`} className='navbar-item'>Your Profile</Link>
+                <Link to="/releases/new" className='navbar-item'>Create Release</Link>
+                <Link to="/artists/new" className='navbar-item'>Create Artist</Link>
+                <button onClick={logout} className="navbar-item button is-primary is-ghost">
+                  Logout
+                </button>
+              </>
             )}
           </div>
         </div>

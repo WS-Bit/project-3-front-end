@@ -74,8 +74,8 @@ function App() {
         <Route path="/artists/new" element={<CreateArtist user={user} />} />
         <Route path="/releases/:releaseId" element={<ShowRelease user={user} />} />
         <Route path="/artists/:artistId" element={<ShowArtist user={user} />} />
-        <Route path="/your-page" element={user ? <UserProfile user={user} /> : <div>Loading...</div>} />
-        <Route path="/users/:userId" element={<UserProfile />} />
+        <Route path="/profile" element={user ? <UserProfile user={user} /> : <div>Loading...</div>} />
+        <Route path="/user/:userId/profile" element={<UserProfile user={user} />} />
       </Routes>
     </Router>
   );
