@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { User, Release, Review, Artist } from "../interfaces/types";
-import ArtistSelect from "./ArtistSelect";
 import EditReview from "./EditReview";
 import ReleaseForm from "./ReleaseForm";
 import ReleaseDetails from "./ReleaseDetails";
@@ -48,14 +47,14 @@ function ShowRelease({ user }: ShowReleaseProps) {
       setLoading(false);
       return;
     }
-
+  
     try {
       const response = await axios.get<Release>(`/api/releases/${releaseId}`);
       const fetchedRelease = {
         ...response.data,
         artist: response.data.artist as Artist,
       };
-
+  
       setRelease(fetchedRelease);
       setEditForm(fetchedRelease);
       setLoading(false);
@@ -132,10 +131,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
       const token = getToken();
       const response = await axios.post<Review>(
         `/api/releases/${release._id}/reviews`,
-        {
-          ...newReview,
-          user: user._id,
-        },
+        newReview,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -143,18 +139,24 @@ function ShowRelease({ user }: ShowReleaseProps) {
           },
         }
       );
-
-      const updatedReviews = Array.isArray(release.reviews)
-        ? [...release.reviews, response.data]
-        : release.reviews
-        ? [release.reviews, response.data]
-        : [response.data];
-
-      setRelease({
-        ...release,
-        reviews: updatedReviews,
+  
+      const createdReview = response.data;
+  
+      setRelease(prevRelease => {
+        if (!prevRelease) return prevRelease;
+        
+        const updatedReviews = Array.isArray(prevRelease.reviews)
+          ? [...prevRelease.reviews, createdReview]
+          : prevRelease.reviews
+          ? [prevRelease.reviews, createdReview]
+          : [createdReview];
+  
+        return {
+          ...prevRelease,
+          reviews: updatedReviews
+        };
       });
-
+  
       setNewReview({ stars: 0, text: "", favouriteTrack: "" });
     } catch (error) {
       console.error("Error creating review:", error);
@@ -285,7 +287,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
       </ol>
     );
   };
-  
+
   const renderReviews = () => {
     if (!release || !release.reviews) {
       return <p>No reviews yet.</p>;

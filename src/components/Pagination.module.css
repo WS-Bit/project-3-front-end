@@ -1,0 +1,51 @@
+
+.yellowPagination {
+  background-color: #ffdd57 ;
+  border-color: #ffdd57 ;
+  color: rgba(0, 0, 0, 0.7) ;
+}
+
+.yellowPagination:hover {
+  background-color: #ffce00 ;
+  border-color: #ffce00 ;
+}
+
+.yellowPagination.is-current {
+  background-color: #ffd83d ;
+  border-color: #ffd83d ;
+  color: rgba(0, 0, 0, 0.7) ;
+}
+
+
+.yellowLink {
+  color: #ffdd57 ;
+  transition: color 0.3s ease;
+}
+
+.yellowLink:hover {
+  color: #ffce00 ;
+}
+
+
+.releaseBox {
+  border: 1px solid #ffdd57;
+  transition: box-shadow 0.3s ease;
+}
+
+.releaseBox:hover {
+  box-shadow: 0 0 10px rgba(255, 221, 87, 0.5);
+}
+
+
+:global(.pagination-previous.is-warning),
+:global(.pagination-next.is-warning) {
+  background-color: #ffdd57;
+  border-color: #ffdd57;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+:global(.pagination-previous.is-warning:hover),
+:global(.pagination-next.is-warning:hover) {
+  background-color: #ffce00;
+  border-color: #ffce00;
+}
