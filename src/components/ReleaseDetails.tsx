@@ -42,7 +42,7 @@ function ReleaseDetails({ release, renderTrackList }: ReleaseDetailsProps) {
       <p><strong>Year:</strong> {release.year}</p>
       <p><strong>Genre:</strong> {release.genre}</p>
       <p><strong>Release Type:</strong> {release.releaseType}</p>
-      <p><strong>Added by:</strong> {release.user?.username}</p>
+      <p><strong>Added by:</strong> <Link to={`/user/${release.user._id}/profile`}>{release.user.username}</Link></p>
       <h2 className="title is-4">Track List</h2>
       {renderTrackList()}<br/>
     </div>

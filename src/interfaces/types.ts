@@ -10,6 +10,11 @@ export interface User {
   favorites?: Release[];
 }
 
+export interface ProfileUser {
+  uploads: Release[];
+  user: User;
+}
+
 export interface Review {
   _id: string;
   text: string;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { User, Release, Artist } from '../interfaces/types';
+import { User, Release, Artist, ProfileUser } from '../interfaces/types';
 
 interface UserProfileProps {
   user: User | null; // logged-in user prop
@@ -9,7 +9,7 @@ interface UserProfileProps {
 
 const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   const { userId } = useParams<{ userId: string }>();
-  const [profileUser, setProfileUser] = useState<User | null>(null);
+  const [profileUser, setProfileUser] = useState<ProfileUser | null>(null);
   const [uploads, setUploads] = useState<Release[]>([]);
   const [artists, setArtists] = useState<Record<string, Artist>>({});
   const [loading, setLoading] = useState(true);
@@ -28,10 +28,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
         }
     
         // Fetch user profile
-        const userResponse = await axios.get<User>(`/api/user/${userId}/profile`, {
+        const userResponse = await axios.get<ProfileUser>(`/api/user/${userId}/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfileUser(userResponse.data);
+        console.log('Profile User:', userResponse.data);
     
         // Fetch user uploads
         const uploadsResponse = await axios.get<Release[]>(`/api/user/${userId}/uploads`, {
@@ -86,8 +87,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   return (
     <section className="section">
       <div className="container">
-      <h1 className="title is-2">{profileUser.username ? `${profileUser.username}'s Profile` : 'User Profile'}</h1>
-      <p className="subtitle is-4">{profileUser.email}</p>
+      <h1 className="title is-2">{profileUser?.user.username ? `${profileUser.user.username}'s Profile` : 'User Profile'}</h1>
 
         <h2 className="title is-4 mt-6">Uploads</h2>
         {uploads.length > 0 ? (
