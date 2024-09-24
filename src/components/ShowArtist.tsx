@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { User, Artist, Release } from "../interfaces/types";
+import styles from './Pagination.module.css';
 
 interface ShowArtistProps {
   user: User | null;
 }
+
+type SortOption = 'titleAZ' | 'yearDesc' | 'genreAZ';
 
 function ShowArtist({ user }: ShowArtistProps) {
   const [artist, setArtist] = useState<Artist | null>(null);
@@ -15,6 +18,44 @@ function ShowArtist({ user }: ShowArtistProps) {
   const [editForm, setEditForm] = useState<Partial<Artist>>({});
   const { artistId } = useParams<{ artistId?: string }>();
   const navigate = useNavigate();
+
+  // New state for releases filtering, sorting, and pagination
+  const [sortOption, setSortOption] = useState<SortOption>('yearDesc');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [releasesPerPage] = useState(6);
+
+  
+  const filteredAndSortedReleases = useMemo(() => {
+    if (!artist || !artist.releases) return [];
+
+    let result = [...artist.releases];
+
+    
+    if (searchTerm) {
+      result = result.filter((release) => 
+        release.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        release.genre.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    
+    result.sort((a, b) => {
+      switch (sortOption) {
+        case 'titleAZ':
+          return a.title.localeCompare(b.title);
+        case 'yearDesc':
+          return b.year - a.year;
+        case 'genreAZ':
+          return a.genre.localeCompare(b.genre);
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  }, [artist, searchTerm, sortOption]);
+
 
   async function fetchArtist() {
     if (!artistId) {
@@ -121,8 +162,16 @@ function ShowArtist({ user }: ShowArtistProps) {
     return <div className="section"><div className="container"><p>Artist not found.</p></div></div>;
   }
 
-  const canEdit = user && artist.user && user._id === artist.user._id;
+  // Pagination logic
+  const indexOfLastRelease = currentPage * releasesPerPage;
+  const indexOfFirstRelease = indexOfLastRelease - releasesPerPage;
+  const currentReleases = filteredAndSortedReleases.slice(indexOfFirstRelease, indexOfLastRelease);
+  const totalPages = Math.ceil(filteredAndSortedReleases.length / releasesPerPage);
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setCurrentPage(newPage);
+  };
 
   return (
     <section className="section">
@@ -238,41 +287,99 @@ function ShowArtist({ user }: ShowArtistProps) {
                 )}
               </>
             )}
-            <h2 className="title is-4 mt-6">Releases</h2>
-            {artist.releases && artist.releases.length > 0 ? (
-              <div className="columns is-multiline">
-                {artist.releases.map((release: Release) => (
-                  <div key={release._id} className="column is-half">
-                    <div className="box">
-                      <article className="media">
-                        <div className="media-left">
-                          <figure className="image is-64x64">
-                            <img src={release.image || '/default-album-cover.jpg'} alt={release.title} />
-                          </figure>
-                        </div>
-                        <div className="media-content">
-                          <div className="content">
-                            <p>
-                              <strong><Link to={`/releases/${release._id}`}>{release.title}</Link></strong>
-                              <br />
-                              <small>{release.year} • {release.genre} • {release.releaseType}</small>
-                            </p>
-                          </div>
-                        </div>
-                      </article>
-                    </div>
-                  </div>
-                ))}
+                    <h2 className="title is-4 mt-6">Releases</h2>
+        {artist && artist.releases && artist.releases.length > 0 ? (
+          <>
+            <div className="field is-grouped mb-5">
+              <div className="control">
+                <div className="select">
+                  <select 
+                    value={sortOption} 
+                    onChange={(e) => setSortOption(e.target.value as SortOption)}
+                  >
+                    <option value="yearDesc">Sort by Year (Newest First)</option>
+                    <option value="titleAZ">Sort by Title A-Z</option>
+                    <option value="genreAZ">Sort by Genre A-Z</option>
+                  </select>
+                </div>
               </div>
-            ) : (
-              <p>No releases yet.</p>
-            )}
-            <div className="mt-4">
-            <Link 
+              <div className="control is-expanded">
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="Search releases..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="columns is-multiline">
+              {currentReleases.map((release: Release) => (
+                <div key={release._id} className="column is-half">
+                  <div className="box">
+                    <article className="media">
+                      <div className="media-left">
+                        <figure className="image is-64x64">
+                          <img src={release.image || '/default-album-cover.jpg'} alt={release.title} />
+                        </figure>
+                      </div>
+                      <div className="media-content">
+                        <div className="content">
+                          <p>
+                            <strong><Link to={`/releases/${release._id}`}>{release.title}</Link></strong>
+                            <br />
+                            <small>{release.year} • {release.genre} • {release.releaseType}</small>
+                          </p>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <nav className="pagination is-centered mt-6" role="navigation" aria-label="pagination">
+              <button
+                className="pagination-previous is-warning"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                className="pagination-next is-warning"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+              <ul className="pagination-list">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <li key={page}>
+                    <button
+                      className={`pagination-link ${styles.yellowPagination} ${
+                        currentPage === page ? 'is-current' : ''
+                      }`}
+                      aria-label={`Go to page ${page}`}
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </>
+        ) : (
+          <p>No releases yet.</p>
+        )}
+        <div className="mt-4">
+          <Link 
             to="/releases/new" 
-            state={{ artistId: artist._id }}
+            state={{ artistId: artist?._id }}
             className="button is-primary"
-            >
+          >
                 Add New Release
               </Link>
             </div>

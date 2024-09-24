@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Release } from '../interfaces/types';
+import styles from './Pagination.module.css';
 
 interface User {
   _id: string;
@@ -45,7 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
             
             {user && (
               <>
-                <Link to={`/user/${user?._id}/profile`} className='navbar-item'>Your Profile</Link>
+                <Link to={`/user/${user?._id}/profile`} className='navbar-item'><h1>{user.username ? `${user.username}'s Profile` : 'User Profile'}</h1></Link>
                 <Link to="/releases/new" className='navbar-item'>Create Release</Link>
                 <Link to="/artists/new" className='navbar-item'>Create Artist</Link>
                 <button onClick={logout} className="navbar-item button is-primary is-ghost">

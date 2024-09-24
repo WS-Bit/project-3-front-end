@@ -26,7 +26,7 @@ function Login({ fetchUser }: LoginProps) {
       const response = await axios.post("http://localhost:8000/api/login", formData);
       localStorage.setItem("token", response.data.token);
       await fetchUser();
-      navigate("/");
+      navigate("/artists");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.message) {
         setErrorMessage(error.response.data.message);

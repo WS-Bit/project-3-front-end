@@ -1,12 +1,12 @@
 
 .yellowPagination {
-  background-color: #ffdd57 ;
+  background-color: #ffce00 ;
   border-color: #ffdd57 ;
   color: rgba(0, 0, 0, 0.7) ;
 }
 
 .yellowPagination:hover {
-  background-color: #ffce00 ;
+  background-color: #cfa600 ;
   border-color: #ffce00 ;
 }
 
