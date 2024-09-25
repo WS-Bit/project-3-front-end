@@ -179,7 +179,7 @@ function ShowArtist({ user }: ShowArtistProps) {
         <div className="columns">
           <div className="column is-one-third">
             <figure className="image is-square">
-              <img src={artist.image} alt={artist.name} style={{objectFit: 'cover'}} />
+              <img src={artist.image} alt={artist.name} className={`box ${styles.releaseBox}`} style={{objectFit: 'cover'}} />
             </figure>
           </div>
           <div className="column">
@@ -277,7 +277,7 @@ function ShowArtist({ user }: ShowArtistProps) {
                 </div>
                 {user && artist.user && user._id === artist.user._id && (
                   <div className="buttons">
-                    <button onClick={() => setIsEditing(true)} className="button is-primary">
+                    <button onClick={() => setIsEditing(true)} className="button is-warning">
                       Edit Artist
                     </button>
                     <button onClick={deleteArtist} className="button is-danger">
@@ -317,7 +317,7 @@ function ShowArtist({ user }: ShowArtistProps) {
             <div className="columns is-multiline">
               {currentReleases.map((release: Release) => (
                 <div key={release._id} className="column is-half">
-                  <div className="box">
+                  <div className={`box ${styles.releaseBox}`}>
                     <article className="media">
                       <div className="media-left">
                         <figure className="image is-64x64">
@@ -378,7 +378,7 @@ function ShowArtist({ user }: ShowArtistProps) {
           <Link 
             to="/releases/new" 
             state={{ artistId: artist?._id }}
-            className="button is-primary"
+            className="button is-warning"
           >
                 Add New Release
               </Link>

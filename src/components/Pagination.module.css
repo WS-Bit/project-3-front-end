@@ -6,13 +6,13 @@
 }
 
 .yellowPagination:hover {
-  background-color: #cfa600 ;
+  background-color: #ffe270 ;
   border-color: #ffce00 ;
 }
 
 .yellowPagination.is-current {
-  background-color: #ffd83d ;
-  border-color: #ffd83d ;
+  background-color: #fddd5a ;
+  border-color: #ffce0c ;
   color: rgba(0, 0, 0, 0.7) ;
 }
 

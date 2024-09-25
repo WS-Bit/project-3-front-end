@@ -53,11 +53,11 @@ function CreateRelease({ user }: CreateReleaseProps) {
       .split('\n')
       .filter(track => track.trim() !== '')
       .map((track, index) => {
-        // Check if the track already starts with a number
+        
         if (/^\d+\.?\s/.test(track.trim())) {
-          return track.trim(); // If it does, leave it as is
+          return track.trim(); 
         } else {
-          return `${index + 1}. ${track.trim()}`; // If not, add the number
+          return `${index + 1}. ${track.trim()}`; 
         }
       })
       .join('\n');
@@ -159,12 +159,13 @@ function CreateRelease({ user }: CreateReleaseProps) {
                   onChange={handleArtistChange}
                 >
                   <option value="">Select an artist</option>
+                  <option value="new">Add new artist</option>
                   {artists.map(artist => (
                     <option key={artist._id} value={artist._id}>
                       {artist.name}
                     </option>
                   ))}
-                  <option value="new">Add new artist</option>
+                  
                 </select>
               </div>
             </div>
