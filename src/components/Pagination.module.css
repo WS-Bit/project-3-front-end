@@ -1,20 +1,23 @@
 
 .yellowPagination {
-  background-color: #c1a536 ;
-  border-color: #f3d76a ;
-  color: rgba(0, 0, 0, 0.7) ;
+  background-color: #d3d3d3; 
+  border-color: #d3d3d3;
+  color: rgba(0, 0, 0, 0.7);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .yellowPagination:hover {
-  background-color: #ffe270 ;
-  border-color: #ffce00 ;
+  background-color: #ffe270; 
+  border-color: #ffce00;
 }
 
 .yellowPagination.is-current {
-  background-color: #fddd5a ;
-  border-color: #ffce0c ;
-  color: rgba(0, 0, 0, 0.7) ;
+  background-color: #f1c40f !important;
+  border-color: #f39c12 !important;
+  color: rgba(0, 0, 0, 0.9) !important;
 }
+
+
 
 
 .yellowLink {
@@ -50,10 +53,10 @@
   border-color: #ffce00;
 }
 
-.tabs a {
+:global(.tabs a) {
   color: #ffce00; 
 }
 
-.tabs li.is-active a {
+:global(.tabs li.is-active a) {
   border-bottom-color: #ffce00;
 }

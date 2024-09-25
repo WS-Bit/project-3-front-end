@@ -220,14 +220,14 @@ const UserProfile = ({ user }: UserProfileProps) => {
             </div>
             <nav className="pagination is-centered mt-6" role="navigation" aria-label="pagination">
               <button
-                className="pagination-previous is-warning"
+                className={`pagination-previous ${styles.yellowPagination}`}
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 Previous
               </button>
               <button
-                className="pagination-next is-warning"
+                className={`pagination-next ${styles.yellowPagination}`} 
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >

@@ -1,6 +1,6 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
 interface LoginProps {
   fetchUser: () => Promise<void>;
@@ -23,11 +23,16 @@ function Login({ fetchUser }: LoginProps) {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login", formData);
+      console.log("Attempting login...");
+      const response = await axios.post("/api/login", formData);
+      console.log("Login successful, setting token...");
       localStorage.setItem("token", response.data.token);
+      console.log("Fetching user...");
       await fetchUser();
-      navigate("/releases");
+      console.log("User fetched, navigating to releases...");
+      navigate("/releases"); // Navigate immediately after successful login
     } catch (error: any) {
+      console.error("Login error:", error);
       if (error.response && error.response.data && error.response.data.message) {
         setErrorMessage(error.response.data.message);
       } else {
@@ -82,5 +87,6 @@ function Login({ fetchUser }: LoginProps) {
     </div>
   );
 }
+
 
 export default Login;

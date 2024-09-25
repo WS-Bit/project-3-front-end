@@ -29,6 +29,7 @@ export interface User {
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [key, setKey] = useState(0);
 
   const fetchUser = async () => {
     setLoading(true);
@@ -36,16 +37,15 @@ function App() {
     if (!token) {
       setUser(null);
       setLoading(false);
+      setKey(prevKey => prevKey + 1);
       return;
     }
     try {
-      
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
       const response = await axios.get<User>("/api/user");
       setUser(response.data);
+      setKey(prevKey => prevKey + 1);
     } catch (error) {
-      
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         localStorage.removeItem("token");
         delete axios.defaults.headers.common['Authorization'];
@@ -83,20 +83,22 @@ function App() {
 
   return (
     <Router>
-      <Navbar user={user} setUser={setUser} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login fetchUser={fetchUser} />} />
-        <Route path="/releases" element={<ReleaseList />} />
-        <Route path="/artists" element={<ArtistsList />} />
-        <Route path="/releases/new" element={<CreateRelease user={user} />} />
-        <Route path="/artists/new" element={<CreateArtist user={user} />} />
-        <Route path="/releases/:releaseId" element={<ShowRelease user={user} />} />
-        <Route path="/artists/:artistId" element={<ShowArtist user={user} />} />
-        <Route path="/profile" element={user ? <UserProfile user={user} /> : <div>Loading...</div>} />
-        <Route path="/user/:userId/profile" element={<UserProfile user={user} />} />
-      </Routes>
+      <div key={key}>
+        <Navbar user={user} setUser={setUser} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login fetchUser={fetchUser} />} />
+          <Route path="/releases" element={<ReleaseList />} />
+          <Route path="/artists" element={<ArtistsList />} />
+          <Route path="/releases/new" element={<CreateRelease user={user} />} />
+          <Route path="/artists/new" element={<CreateArtist user={user} />} />
+          <Route path="/releases/:releaseId" element={<ShowRelease user={user} />} />
+          <Route path="/artists/:artistId" element={<ShowArtist user={user} />} />
+          <Route path="/profile" element={user ? <UserProfile user={user} /> : <div>Loading...</div>} />
+          <Route path="/user/:userId/profile" element={<UserProfile user={user} />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
