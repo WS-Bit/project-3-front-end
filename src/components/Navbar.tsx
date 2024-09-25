@@ -19,7 +19,7 @@ interface NavbarProps {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
+const Navbar = ({ user, setUser }: NavbarProps) => {
   const navigate = useNavigate();
 
   function logout() {
@@ -33,23 +33,23 @@ const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
       <nav className='navbar is-dark'>
         <div className='container'>
           <div className='navbar-brand'>
-            <Link to="/" className='navbar-item'>Home</Link>
-            <Link to="/releases" className='navbar-item'>All Releases</Link>
-            <Link to="/artists" className='navbar-item'>All Artists</Link>
+            <Link to="/" className={`navbar-item button ${styles.yellowLink}`}>Home</Link>
+            <Link to="/releases" className={`navbar-item button ${styles.yellowLink}`}>All Releases</Link>
+            <Link to="/artists" className={`navbar-item button ${styles.yellowLink}`}>All Artists</Link>
             
             {!user && (
               <>
-                <Link to="/signup" className='navbar-item'>Signup</Link>
-                <Link to="/login" className='navbar-item'>Login</Link>
+                <Link to="/signup" className={`navbar-item button ${styles.yellowLink}`}>Signup</Link>
+                <Link to="/login" className={`navbar-item button ${styles.yellowLink}`}>Login</Link>
               </>
             )}
             
             {user && (
               <>
-                <Link to={`/user/${user?._id}/profile`} className='navbar-item'><h1>{user.username ? `${user.username}'s Profile` : 'User Profile'}</h1></Link>
-                <Link to="/releases/new" className='navbar-item'>Create Release</Link>
-                <Link to="/artists/new" className='navbar-item'>Create Artist</Link>
-                <button onClick={logout} className="navbar-item button is-primary is-ghost">
+                <Link to={`/user/${user?._id}/profile`} className={`navbar-item button ${styles.yellowLink}`}><h1>{user.username ? `${user.username}'s Profile` : 'User Profile'}</h1></Link>
+                <Link to="/releases/new" className={`navbar-item button ${styles.yellowLink}`}>Create Release</Link>
+                <Link to="/artists/new" className={`navbar-item button ${styles.yellowLink}`}>Create Artist</Link>
+                <button onClick={logout} className={`navbar-item button ${styles.yellowLink}`}>
                   Logout
                 </button>
               </>

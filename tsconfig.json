@@ -13,7 +13,7 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "composite": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {

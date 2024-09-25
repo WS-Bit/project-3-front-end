@@ -7,6 +7,7 @@ import ReleaseForm from "./ReleaseForm";
 import ReleaseDetails from "./ReleaseDetails";
 import ReviewForm from "./ReviewForm";
 import ReviewDetails from "./ReviewDetails";
+import styles from './Pagination.module.css';
 
 interface ShowReleaseProps {
   user: User | null;
@@ -27,6 +28,8 @@ function ShowRelease({ user }: ShowReleaseProps) {
   const [editForm, setEditForm] = useState<Partial<Release>>({});
   const [editingReview, setEditingReview] = useState<string | null>(null);
   const [editReviewForm, setEditReviewForm] = useState<Partial<Review>>({});
+  const [isFavourite, setIsFavourite] = useState(false);
+  const [favouriteError, setFavoriteError] = useState<string | null>(null);
   const { releaseId } = useParams<{ releaseId?: string }>();
   const navigate = useNavigate();
 
@@ -40,6 +43,12 @@ function ShowRelease({ user }: ShowReleaseProps) {
       setTrackList(release.trackList);
     }
   }, [release]);
+
+  useEffect(() => {
+    if (user && release) {
+      checkIfFavorite();
+    }
+  }, [user, release]);
 
   async function fetchRelease() {
     if (!releaseId) {
@@ -227,9 +236,62 @@ function ShowRelease({ user }: ShowReleaseProps) {
     }
   }
 
-  function getToken() {
+  async function checkIfFavorite() {
+    if (!user || !release) return;
+    try {
+      const token = getToken();
+      const response = await axios.get(`/api/user/${user._id}/favourites`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setIsFavourite(response.data.some((fav: Release) => fav._id === release._id));
+    } catch (error) {
+      console.error("Error checking favorite status:", error);
+    }
+  }
+
+  async function toggleFavorite() {
+    if (!user || !release) return;
+    try {
+      setFavoriteError(null);
+      const token = getToken();
+      const endpoint = `/api/user/${user._id}/favourites/${release._id}`;
+      const method = isFavourite ? 'delete' : 'post';
+      
+      const response = await axios[method](
+        endpoint,
+        {}, // empty body for both POST and DELETE
+        {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+      
+      setIsFavourite(!isFavourite);
+    } catch (error: unknown) {
+      console.error("Error toggling favorite:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("Error details:", error.response?.data);
+        console.error("Status code:", error.response?.status);
+        if (error.response?.status === 401) {
+          setFavoriteError("You are not authorized. Please log in again.");
+        } else {
+          setFavoriteError(`Failed to update favorite status: ${error.response?.data?.message || error.message}`);
+        }
+      } else if (error instanceof Error) {
+        setFavoriteError(`An error occurred: ${error.message}`);
+      } else {
+        setFavoriteError("An unexpected error occurred. Please try again later.");
+      }
+    }
+  }
+
+  function getToken(): string {
     const token = localStorage.getItem("token");
-    if (!token) throw new Error("No authentication token found");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
     return token;
   }
 
@@ -372,11 +434,24 @@ function ShowRelease({ user }: ShowReleaseProps) {
               />
             ) : (
               <>
-                <h1 className="title is-2">{release.title}</h1>
+                 <div className="is-flex is-justify-content-space-between is-align-items-center">
+                  <h1 className="title is-2">{release.title}</h1>
+                  {user && (
+                    <button 
+                      className={`button ${isFavourite ? 'is-warning' : 'is-light'}`} 
+                      onClick={toggleFavorite}
+                    >
+                      <span className="icon">
+                        <i className={`fas fa-star ${isFavourite ? 'has-text-white' : ''}`}></i>
+                      </span>
+                    </button>
+                  )}
+                  {favouriteError && <p className="has-text-danger">{favouriteError}</p>}
+                </div>
                 <ReleaseDetails release={release} renderTrackList={renderTrackList} />
                 {user && release.user && user._id === release.user._id && (
                   <div className="buttons">
-                    <button onClick={() => setIsEditing(true)} className="button is-primary">
+                    <button onClick={() => setIsEditing(true)} className="button is-warning">
                       Edit Release
                     </button>
                     <button onClick={deleteRelease} className="button is-danger">

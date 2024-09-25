@@ -10,10 +10,11 @@ interface UserProfileProps {
 
 type SortOption = 'titleAZ' | 'artistAZ' | 'yearDesc' | 'genreAZ';
 
-const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+const UserProfile = ({ user }: UserProfileProps) => {
   const { userId } = useParams<{ userId: string }>();
   const [profileUser, setProfileUser] = useState<ProfileUser | null>(null);
   const [uploads, setUploads] = useState<Release[]>([]);
+  const [favourites, setFavourites] = useState<Release[]>([]);
   const [artists, setArtists] = useState<Record<string, Artist>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,9 +22,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   const [releasesPerPage] = useState(15);
   const [sortOption, setSortOption] = useState<SortOption>('titleAZ');
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState<'uploads' | 'favourites'>('uploads');
 
   useEffect(() => {
-    const fetchUserAndUploads = async () => {
+    const fetchUserData = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
@@ -34,17 +36,24 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
           return;
         }
     
-        const userResponse = await axios.get<ProfileUser>(`/api/user/${userId}/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setProfileUser(userResponse.data);
-    
-        const uploadsResponse = await axios.get<Release[]>(`/api/user/${userId}/uploads`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUploads(uploadsResponse.data);
+        const [userResponse, uploadsResponse, favouritesResponse] = await Promise.all([
+          axios.get<ProfileUser>(`/api/user/${userId}/profile`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get<Release[]>(`/api/user/${userId}/uploads`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get<Release[]>(`/api/user/${userId}/favourites`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+        ]);
 
-        const artistIds = uploadsResponse.data
+        setProfileUser(userResponse.data);
+        setUploads(uploadsResponse.data);
+        setFavourites(favouritesResponse.data);
+
+        const allReleases = [...uploadsResponse.data, ...favouritesResponse.data];
+        const artistIds = allReleases
           .map((release) => (typeof release.artist === 'string' ? release.artist : release.artist._id))
           .filter((id, index, self) => self.indexOf(id) === index);
 
@@ -67,12 +76,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     };
     
     if (userId) {
-      fetchUserAndUploads();
+      fetchUserData();
     }
   }, [userId]);
 
-  const filteredAndSortedUploads = useMemo(() => {
-    let result = [...uploads];
+  const filteredAndSortedReleases = useMemo(() => {
+    let result = activeTab === 'uploads' ? [...uploads] : [...favourites];
 
     if (searchTerm) {
       result = result.filter((release) => 
@@ -101,12 +110,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     });
 
     return result;
-  }, [uploads, artists, searchTerm, sortOption]);
+  }, [uploads, favourites, artists, searchTerm, sortOption, activeTab]);
 
   const indexOfLastRelease = currentPage * releasesPerPage;
   const indexOfFirstRelease = indexOfLastRelease - releasesPerPage;
-  const currentReleases = filteredAndSortedUploads.slice(indexOfFirstRelease, indexOfLastRelease);
-  const totalPages = Math.ceil(filteredAndSortedUploads.length / releasesPerPage);
+  const currentReleases = filteredAndSortedReleases.slice(indexOfFirstRelease, indexOfLastRelease);
+  const totalPages = Math.ceil(filteredAndSortedReleases.length / releasesPerPage);
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
@@ -130,8 +139,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
       <div className="container">
         <h1 className="title is-2">{profileUser?.user.username ? `${profileUser.user.username}'s Profile` : 'User Profile'}</h1>
 
-        <h2 className="title is-4 mt-6">Uploads</h2>
-        {uploads.length > 0 ? (
+        <div className="tabs">
+          <ul>
+            <li className={activeTab === 'uploads' ? 'is-active' : ''}>
+              <a onClick={() => setActiveTab('uploads')}>Uploads</a>
+            </li>
+            <li className={activeTab === 'favourites' ? 'is-active' : ''}>
+              <a onClick={() => setActiveTab('favourites')}>Favourites</a>
+            </li>
+          </ul>
+        </div>
+
+        <h2 className="title is-4 mt-6">{activeTab === 'uploads' ? 'Uploads' : 'Favourites'}</h2>
+        {filteredAndSortedReleases.length > 0 ? (
           <>
             <div className="field is-grouped mb-5">
               <div className="control">
@@ -151,7 +171,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                 <input
                   className="input"
                   type="text"
-                  placeholder="Search uploads..."
+                  placeholder={`Search ${activeTab}...`}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -231,7 +251,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
             </nav>
           </>
         ) : (
-          <p>No uploads yet.</p>
+          <p>No {activeTab} yet.</p>
         )}
       </div>
     </section>

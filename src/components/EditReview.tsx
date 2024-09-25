@@ -9,13 +9,13 @@ interface EditReviewProps {
   setEditingReview: (reviewId: string | null) => void;
 }
 
-const EditReview: React.FC<EditReviewProps> = ({
+const EditReview = ({
   review,
   editReviewForm,
   handleEditReviewChange,
   handleUpdateReview,
   setEditingReview,
-}) => {
+}: EditReviewProps) => {
   return (
     <form onSubmit={(e) => handleUpdateReview(e, review._id)}>
       <div className="field">

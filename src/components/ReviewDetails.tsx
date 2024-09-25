@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { User, Review } from "../interfaces/types";
+import styles from './Pagination.module.css';
 
 interface ReviewDetailsProps {
   review: Review;
@@ -23,14 +24,14 @@ const ReviewDetails: React.FC<ReviewDetailsProps> = ({ review, user, deleteRevie
       {review.text && <p>{review.text}</p>}
       <p className="is-size-7 mt-2">
         - {review.user && review.user._id ? (
-          <Link to={`/user/${review.user._id}/profile`}>{review.user.username}</Link>
+          <Link to={`/user/${review.user._id}/profile`} className={styles.yellowLink}>{review.user.username}</Link>
         ) : (
           "Anonymous"
         )}
       </p>
       {user && review.user && review.user._id && user._id === review.user._id && (
         <div className="buttons mt-3">
-          <button onClick={() => handleEditReview(review)} className="button is-small is-info">
+          <button onClick={() => handleEditReview(review)} className="button is-small is-warning">
             Edit Review
           </button>
           <button onClick={() => deleteReview(review._id)} className="button is-small is-danger">

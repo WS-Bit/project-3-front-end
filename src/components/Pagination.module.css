@@ -1,7 +1,7 @@
 
 .yellowPagination {
-  background-color: #ffce00 ;
-  border-color: #ffdd57 ;
+  background-color: #c1a536 ;
+  border-color: #f3d76a ;
   color: rgba(0, 0, 0, 0.7) ;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .releaseBox:hover {
-  box-shadow: 0 0 10px rgba(255, 221, 87, 0.5);
+  box-shadow: 0 0 15px rgba(235, 190, 14, 0.5);
 }
 
 

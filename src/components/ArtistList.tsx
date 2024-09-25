@@ -23,7 +23,6 @@ function ArtistsList() {
         setArtists(response.data);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching artists:', err);
         setError('Failed to fetch artists. Please try again later.');
         setLoading(false);
       }

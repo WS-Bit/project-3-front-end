@@ -84,12 +84,9 @@ function CreateRelease({ user }: CreateReleaseProps) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
   
-      console.log("RESPONSE IS: ", response);
-  
       localStorage.setItem('newReleaseAdded', 'true');
       navigate(`/artists/${selectedArtist || response.data.artist}`);
     } catch (error: any) {
-      console.log("THE ERROR IS: ", error);
       setErrorData(error.response.data.errors || {});
     }
   }
@@ -159,13 +156,15 @@ function CreateRelease({ user }: CreateReleaseProps) {
                   onChange={handleArtistChange}
                 >
                   <option value="">Select an artist</option>
-                  <option value="new">Add new artist</option>
-                  {artists.map(artist => (
-                    <option key={artist._id} value={artist._id}>
-                      {artist.name}
-                    </option>
-                  ))}
-                  
+                  <option value="new">ADD NEW ARTIST</option>
+                  {artists
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(artist => (
+                      <option key={artist._id} value={artist._id}>
+                        {artist.name}
+                      </option>
+                    ))
+                  }
                 </select>
               </div>
             </div>

@@ -33,7 +33,6 @@ function Signup() {
   
     try {
       const response = await axios.post("/api/signup", formData);
-      console.log(response.data);
       navigate("/login");
     } catch (error: any) {
       console.error("An error occurred during signup:", error);

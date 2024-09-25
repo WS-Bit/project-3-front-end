@@ -19,8 +19,6 @@ function ArtistSelect({ artists, value, onChange }: ArtistSelectProps) {
     onChange(e);
   };
 
-  console.log('Current selected artist:', selectedArtist);
-  console.log('Available artists:', artists);
 
   return (
     <div className="field">

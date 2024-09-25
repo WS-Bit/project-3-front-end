@@ -7,7 +7,7 @@ interface ReviewFormProps {
   createReview: (e: React.FormEvent) => Promise<void>;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ newReview, handleReviewChange, createReview }) => {
+const ReviewForm = ({ newReview, handleReviewChange, createReview }: ReviewFormProps) => {
   return (
     <form onSubmit={createReview}>
       <div className="field">
@@ -52,7 +52,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ newReview, handleReviewChange, 
       <div className="field">
         <div className="control">
           <br />
-          <button type="submit" className="button is-primary">
+          <button type="submit" className="button is-warning">
             Submit Review
           </button>
         </div>

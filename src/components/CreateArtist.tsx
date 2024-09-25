@@ -42,11 +42,9 @@ function CreateArtist({ user }: CreateArtistProps) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
   
-      console.log("RESPONSE IS: ", response);
   
       navigate("/artists");
     } catch (error: any) {
-      console.log("THE ERROR IS: ", error);
       setErrorData(error.response.data.errors || {});
     }
   }

@@ -67,7 +67,6 @@ function ShowArtist({ user }: ShowArtistProps) {
     try {
       setLoading(true);
       const response = await axios.get<Artist>(`/api/artists/${artistId}`);
-      console.log("Fetched artist data:", response.data);
       
       if (!response.data) {
         throw new Error("No data received from server");

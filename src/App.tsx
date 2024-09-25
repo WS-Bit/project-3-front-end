@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./components/Navbar";
@@ -39,13 +39,17 @@ function App() {
       return;
     }
     try {
-      const response = await axios.get<User>("/api/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Fetched user in App:", response.data);
+      
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
+      const response = await axios.get<User>("/api/user");
       setUser(response.data);
     } catch (error) {
-      console.error("Error fetching user in App:", error);
+      
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        localStorage.removeItem("token");
+        delete axios.defaults.headers.common['Authorization'];
+      }
       setUser(null);
     } finally {
       setLoading(false);
@@ -56,10 +60,26 @@ function App() {
     fetchUser();
   }, []);
 
+  
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401) {
+          localStorage.removeItem("token");
+          delete axios.defaults.headers.common['Authorization'];
+          setUser(null);
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => axios.interceptors.response.eject(interceptor);
+  }, []);
+
   if (loading) {
     return <div>Loading...</div>;
   }
-
 
   return (
     <Router>
