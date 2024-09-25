@@ -47,8 +47,8 @@ const Navbar = ({ user, setUser }: NavbarProps) => {
             {user && (
               <>
                 <Link to={`/user/${user?._id}/profile`} className={`navbar-item button ${styles.yellowLink}`}><h1>{user.username ? `${user.username}'s Profile` : 'User Profile'}</h1></Link>
-                <Link to="/releases/new" className={`navbar-item button ${styles.yellowLink}`}>Create Release</Link>
                 <Link to="/artists/new" className={`navbar-item button ${styles.yellowLink}`}>Create Artist</Link>
+                <Link to="/releases/new" className={`navbar-item button ${styles.yellowLink}`}>Create Release</Link>
                 <button onClick={logout} className={`navbar-item button ${styles.yellowLink}`}>
                   Logout
                 </button>

@@ -1,0 +1,11 @@
+@use "bulma/sass/utilities/_all" as *;
+@use "bulma/sass/base/_all" as *;
+@use "bulma/sass/elements/_all" as *;
+@use "bulma/sass/form/_all" as *;
+@use "bulma/sass/components/_all" as *;
+@use "bulma/sass/grid/_all" as *;
+@use "bulma/sass/helpers/_all" as *;
+@use "bulma/sass/layout/_all" as *;
+
+// Import Bulma Extensions
+@use "bulma-extensions/bulma-switch/src/sass/index" as *;

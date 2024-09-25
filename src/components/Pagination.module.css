@@ -49,3 +49,11 @@
   background-color: #ffce00;
   border-color: #ffce00;
 }
+
+.tabs a {
+  color: #ffce00; 
+}
+
+.tabs li.is-active a {
+  border-bottom-color: #ffce00;
+}

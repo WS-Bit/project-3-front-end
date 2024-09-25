@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { User, Review } from "../interfaces/types";
 import styles from './Pagination.module.css';
@@ -10,7 +10,8 @@ interface ReviewDetailsProps {
   handleEditReview: (review: Review) => void;
 }
 
-const ReviewDetails: React.FC<ReviewDetailsProps> = ({ review, user, deleteReview, handleEditReview }) => {
+const ReviewDetails = ({ review, user, deleteReview, handleEditReview }: ReviewDetailsProps) => {
+
   return (
     <>
       <p>

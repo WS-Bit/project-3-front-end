@@ -37,7 +37,7 @@ function CreateArtist({ user }: CreateArtistProps) {
         "/api/artists",
         {
           ...formData,
-          user: user?._id // Include the user ID in the request data
+          user: user?._id 
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -7,7 +7,7 @@ interface ArtistCardProps {
 
 export default function ArtistCard({ artist }: ArtistCardProps) {
   const nameRef = useRef<HTMLParagraphElement>(null);
-  const [nameFontSize, setNameFontSize] = useState(16); // Starting font size
+  const [nameFontSize, setNameFontSize] = useState(16); 
 
   useEffect(() => {
     const adjustFontSize = () => {
@@ -36,7 +36,7 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
-      maxWidth: '250px', // Set a max width for consistency
+      maxWidth: '250px', 
       margin: '0 auto'
     }}>
       <div style={{ width: '100%', paddingTop: '100%', position: 'relative' }}>

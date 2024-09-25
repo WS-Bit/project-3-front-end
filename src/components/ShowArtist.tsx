@@ -272,7 +272,7 @@ function ShowArtist({ user }: ShowArtistProps) {
                   <p><strong>Year formed:</strong> {artist.formedYear}</p>
                   <p><strong>Genre:</strong> {artist.genre}</p>
                   <p><strong>Biography:</strong> {artist.biography}</p>
-                  <p><strong>Added by:</strong> {artist.user?.username}</p>
+                  <p><strong>Added by:</strong> <Link to={`/user/${artist.user._id}/profile`} className={styles.yellowLink}>{artist.user.username}</Link></p><br/>
                 </div>
                 {user && artist.user && user._id === artist.user._id && (
                   <div className="buttons">
@@ -286,7 +286,7 @@ function ShowArtist({ user }: ShowArtistProps) {
                 )}
               </>
             )}
-                    <h2 className="title is-4 mt-6">Releases</h2>
+                    <h2 className="title is-4 mt-6">Releases</h2><br/>
         {artist && artist.releases && artist.releases.length > 0 ? (
           <>
             <div className="field is-grouped mb-5">

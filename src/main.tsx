@@ -1,7 +1,19 @@
-import ReactDOM from "react-dom/client"
-import "./styles/main.scss"
-import App from "./App"
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <App />
-)
+// Import Bulma CSS
+import 'bulma/css/bulma.min.css';
+
+// Import Bulma Switch extension CSS
+import 'bulma-extensions/bulma-switch/dist/css/bulma-switch.min.css';
+
+// Import your custom styles
+import './styles/custom.scss';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);

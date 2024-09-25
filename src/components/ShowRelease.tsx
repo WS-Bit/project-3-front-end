@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { User, Release, Review, Artist } from "../interfaces/types";
@@ -11,6 +11,8 @@ import styles from './Pagination.module.css';
 
 interface ShowReleaseProps {
   user: User | null;
+  isFavourite?: boolean;
+  toggleFavorite?: () => void; 
 }
 
 function ShowRelease({ user }: ShowReleaseProps) {
@@ -30,6 +32,8 @@ function ShowRelease({ user }: ShowReleaseProps) {
   const [editReviewForm, setEditReviewForm] = useState<Partial<Review>>({});
   const [isFavourite, setIsFavourite] = useState(false);
   const [favouriteError, setFavoriteError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
   const { releaseId } = useParams<{ releaseId?: string }>();
   const navigate = useNavigate();
 
@@ -257,7 +261,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
       const endpoint = `/api/user/${user._id}/favourites/${release._id}`;
       const method = isFavourite ? 'delete' : 'post';
       
-      const response = await axios[method](
+      await axios[method](
         endpoint,
         {}, // empty body for both POST and DELETE
         {
@@ -350,6 +354,26 @@ function ShowRelease({ user }: ShowReleaseProps) {
     );
   };
 
+  const currentReviews = useMemo(() => {
+    if (!release || !release.reviews) return [];
+    const reviewsArray = Array.isArray(release.reviews) ? release.reviews : [release.reviews];
+    const indexOfLastReview = currentPage * reviewsPerPage;
+    const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+    return reviewsArray.slice(indexOfFirstReview, indexOfLastReview);
+  }, [release, currentPage]);
+
+  const totalPages = useMemo(() => {
+    if (!release || !release.reviews) return 0;
+    const reviewsArray = Array.isArray(release.reviews) ? release.reviews : [release.reviews];
+    return Math.ceil(reviewsArray.length / reviewsPerPage);
+  }, [release]);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   const renderReviews = () => {
     if (!release || !release.reviews) {
       return <p>No reviews yet.</p>;
@@ -361,8 +385,8 @@ function ShowRelease({ user }: ShowReleaseProps) {
       ? [release.reviews]
       : [];
 
-    if (reviewsArray.length === 0) {
-      return <p>No reviews yet.</p>;
+    if (currentReviews.length === 0) {
+      return <p>No reviews on this page.</p>;
     }
 
     return reviewsArray.map((review) => (
@@ -434,18 +458,21 @@ function ShowRelease({ user }: ShowReleaseProps) {
               />
             ) : (
               <>
-                 <div className="is-flex is-justify-content-space-between is-align-items-center">
+                <div className="is-flex is-justify-content-space-between is-align-items-center">
                   <h1 className="title is-2">{release.title}</h1>
-                  {user && (
-                    <button 
-                      className={`button ${isFavourite ? 'is-warning' : 'is-light'}`} 
-                      onClick={toggleFavorite}
-                    >
-                      <span className="icon">
-                        <i className={`fas fa-star ${isFavourite ? 'has-text-white' : ''}`}></i>
-                      </span>
-                    </button>
-                  )}
+                    {user && (
+                      <div className="field">
+                        <input 
+                          id="favoriteSwitch" 
+                          type="checkbox" 
+                          name="favoriteSwitch" 
+                          className="switch is-rounded is-warning"
+                          checked={isFavourite}
+                          onChange={toggleFavorite}
+                        />
+                        <label htmlFor="favoriteSwitch">Favorite</label>
+                      </div>
+                    )}
                   {favouriteError && <p className="has-text-danger">{favouriteError}</p>}
                 </div>
                 <ReleaseDetails release={release} renderTrackList={renderTrackList} />
@@ -463,12 +490,72 @@ function ShowRelease({ user }: ShowReleaseProps) {
             )}
 
             <h2 className="title is-4 mt-6">Reviews</h2>
-            {renderReviews()}
+            {currentReviews.length > 0 ? (
+              <>
+                {currentReviews.map((review) => (
+                  <div key={review._id} className="box">
+                    {editingReview === review._id ? (
+                      <EditReview
+                        review={review}
+                        editReviewForm={editReviewForm}
+                        handleEditReviewChange={handleEditReviewChange}
+                        handleUpdateReview={handleUpdateReview}
+                        setEditingReview={setEditingReview}
+                      />
+                    ) : (
+                      <ReviewDetails 
+                        review={review} 
+                        user={user} 
+                        deleteReview={deleteReview} 
+                        handleEditReview={handleEditReview} 
+                      />
+                    )}
+                  </div>
+                ))}
+                <nav className="pagination is-centered mt-4" role="navigation" aria-label="pagination">
+                  <button
+                    className="pagination-previous"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    className="pagination-next"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                  <ul className="pagination-list">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <li key={page}>
+                        <button
+                          className={`pagination-link ${styles.yellowPagination} ${
+                            currentPage === page ? 'is-current' : ''
+                          }`}
+                          aria-label={`Go to page ${page}`}
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </>
+            ) : (
+              <p>No reviews yet.</p>
+            )}
 
             {user && (
               <div className="box mt-5">
                 <h3 className="title is-5">Add a Review</h3>
-                <ReviewForm newReview={newReview} handleReviewChange={handleReviewChange} createReview={createReview} />
+                <ReviewForm 
+                  newReview={newReview} 
+                  handleReviewChange={handleReviewChange} 
+                  createReview={createReview} 
+                />
               </div>
             )}
           </div>

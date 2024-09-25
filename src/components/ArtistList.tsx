@@ -34,7 +34,7 @@ function ArtistsList() {
   const filteredAndSortedArtists = useMemo(() => {
     let result = [...artists];
 
-    // Filter based on search term
+   
     if (searchTerm) {
       result = result.filter((artist) => 
         artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,7 +42,7 @@ function ArtistsList() {
       );
     }
 
-    // Sort based on selected option
+   
     result.sort((a, b) => {
       switch (sortOption) {
         case 'nameAZ':
@@ -57,7 +57,7 @@ function ArtistsList() {
     return result;
   }, [artists, searchTerm, sortOption]);
 
-  // Pagination logic
+  
   const indexOfLastArtist = currentPage * artistsPerPage;
   const indexOfFirstArtist = indexOfLastArtist - artistsPerPage;
   const currentArtists = filteredAndSortedArtists.slice(indexOfFirstArtist, indexOfLastArtist);

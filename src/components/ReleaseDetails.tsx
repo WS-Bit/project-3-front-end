@@ -37,7 +37,7 @@ function ReleaseDetails({ release, renderTrackList }: ReleaseDetailsProps) {
             {artist.name}
           </Link>
         ) : (
-          'Loading artist...'
+          'Loading artist name...'
         )}
       </p>
       <p><strong>Year:</strong> {release.year}</p>

@@ -148,6 +148,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
 
           <div className="field">
             <label htmlFor="artist" className="label">Artist</label>
+            <h3>If Artist is not in the list, please use 'Create Artist'</h3>
             <div className="control">
               <div className="select">
                 <select
@@ -156,7 +157,6 @@ function CreateRelease({ user }: CreateReleaseProps) {
                   onChange={handleArtistChange}
                 >
                   <option value="">Select an artist</option>
-                  <option value="new">ADD NEW ARTIST</option>
                   {artists
                     .sort((a, b) => a.name.localeCompare(b.name))
                     .map(artist => (
