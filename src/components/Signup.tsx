@@ -1,6 +1,7 @@
 import { useState, SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Eye, EyeOff } from 'lucide-react';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,9 @@ function Signup() {
     confirmPassword: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
 
   function handleChange(e: SyntheticEvent) {
@@ -30,7 +34,7 @@ function Signup() {
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post("/api/signup", formData);
       navigate("/login");
@@ -58,6 +62,15 @@ function Signup() {
       }
     }
   }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
 
   return (
     <div className="section">
@@ -103,14 +116,17 @@ function Signup() {
             <label htmlFor="password" className="label">
               Password
             </label>
-            <div className="control">
+            <div className="control has-icons-right">
               <input
-                type="text"
+                type={showPassword ? "text" : "password"}
                 className="input"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
               />
+              <span className="icon is-small is-right" onClick={togglePasswordVisibility} style={{pointerEvents: 'auto', cursor: 'pointer'}}>
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </span>
               {errorData.password && (
                 <small className="has-text-danger">{errorData.password}</small>
               )}
@@ -121,14 +137,17 @@ function Signup() {
             <label htmlFor="confirmPassword" className="label">
               Password Confirmation
             </label>
-            <div className="control">
+            <div className="control has-icons-right">
               <input
-                type="text"
+                type={showConfirmPassword ? "text" : "password"}
                 className="input"
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
+              <span className="icon is-small is-right" onClick={toggleConfirmPasswordVisibility} style={{pointerEvents: 'auto', cursor: 'pointer'}}>
+                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </span>
               {errorData.confirmPassword && (
                 <small className="has-text-danger">
                   {errorData.confirmPassword}

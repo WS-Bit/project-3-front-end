@@ -1,14 +1,70 @@
+/* Form Input Styles */
+.input:focus,
+.textarea:focus,
+.select select:focus {
+  border-color: #ffdd57;
+  box-shadow: 0 0 0 0.125em rgba(255, 221, 87, 0.25);
+}
 
+/* Dropdown styles */
+.select:not(.is-multiple):not(.is-loading)::after {
+  border-color: #ffdd57;
+}
 
+.select:not(.is-multiple):not(.is-loading):hover::after {
+  border-color: #f39c12;
+}
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Button styles */
+.button.is-primary {
+  background-color: #ffdd57;
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-primary:hover {
+  background-color: #f39c12;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.button.is-primary:focus {
+  border-color: #f39c12;
+  box-shadow: 0 0 0 0.125em rgba(255, 221, 87, 0.25);
+}
+
+/* Artist search results */
+.search-results {
+  border: 1px solid #ffdd57;
+  background-color: #14161a;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.search-result-item:hover {
+  background-color: rgba(255, 221, 87, 0.1);
+}
+
+.selected-artist {
+  margin-top: 8px;
+  font-weight: bold;
+  color: #f39c12;
+}
+
+/* Error message style */
+.has-text-danger {
+  color: #ff3860;
 }
 
 
+/* Placeholder text color */
+::placeholder {
+  color: rgba(255, 221, 87, 0.5);
+}
 
 /* global-styles.css */
 
@@ -67,17 +123,7 @@
   color: #ffdd57 !important;
 }
 
-
-.navbar-burger span {
-  background-color: #ffdd57; /* Light yellow color */
+/* Label style */
+.label {
+  color: #ffffff !important;
 }
-
-.navbar-burger:hover span {
-  background-color: #f39c12; /* Darker yellow/orange for hover state */
-}
-
-/* Ensure the color stays yellow when the menu is active */
-.navbar-burger.is-active span {
-  background-color: #ffdd57;
-}
-

@@ -2,6 +2,7 @@ import React, { useState, SyntheticEvent } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { User } from "../interfaces/types";
+import './FormStyles.css';
 
 interface CreateArtistProps {
   user: User | null;
@@ -158,7 +159,7 @@ function CreateArtist({ user }: CreateArtistProps) {
             </div>
           </div><br/>
 
-          <button className="button is-primary" type="submit">
+          <button className="button is-warning" type="submit">
             Submit
           </button>
         </form>

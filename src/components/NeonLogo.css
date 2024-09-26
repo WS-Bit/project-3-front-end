@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+.neon-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Pacifico', cursive;
+  line-height: 1;
+  text-shadow: 0 0 3px #000000, 0 0 5px #ffdd57, 0 0 10px #000000;
+}
+
+.neon-logo.small {
+  font-size: 1.5rem;
+}
+
+.neon-logo.large {
+  font-size: 6rem;
+}
+
+.neon-text {
+  color: #ffdd57;
+  animation: flicker 1.5s infinite alternate;
+}
+
+.neon-text:nth-child(2) {
+  animation-delay: 0.25s;
+}
+
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow: 0 0 2px #ffdd57, 0 0 4px #ffdd57, 0 0 6px #f39c12;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffd700; /* Yellow color */
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffea00; /* Lighter yellow on hover */
+}
+
+@keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

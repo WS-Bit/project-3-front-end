@@ -2,6 +2,9 @@ import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { User, Artist } from "../interfaces/types";
+import { Search } from 'lucide-react'
+import './CreateRelease.css';
+import './FormStyles.css';
 
 interface CreateReleaseProps {
   user: User | null;
@@ -32,6 +35,8 @@ function CreateRelease({ user }: CreateReleaseProps) {
 
   const [artists, setArtists] = useState<Artist[]>([]);
   const [selectedArtist, setSelectedArtist] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredArtists, setFilteredArtists] = useState<Artist[]>([]);
   const navigate = useNavigate();
 
 
@@ -47,6 +52,25 @@ function CreateRelease({ user }: CreateReleaseProps) {
 
     fetchArtists();
   }, []);
+
+  useEffect(() => {
+    const results = artists.filter(artist =>
+      artist.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredArtists(results);
+  }, [searchTerm, artists]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    setSelectedArtist("");
+  };
+
+  const handleSelectArtist = (artist: Artist) => {
+    setSelectedArtist(artist._id);
+    setSearchTerm(artist.name);
+    setFormData(prevData => ({ ...prevData, artist: artist._id }));
+  };
+
 
   function formatTrackList(tracks: string): string {
     return tracks
@@ -149,41 +173,40 @@ function CreateRelease({ user }: CreateReleaseProps) {
           <div className="field">
             <label htmlFor="artist" className="label">Artist</label>
             <h3>If Artist is not in the list, please use 'Create Artist'</h3>
-            <div className="control">
-              <div className="select">
-                <select
-                  name="artist"
-                  value={selectedArtist}
-                  onChange={handleArtistChange}
-                >
-                  <option value="">Select an artist</option>
-                  {artists
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(artist => (
-                      <option key={artist._id} value={artist._id}>
-                        {artist.name}
-                      </option>
-                    ))
-                  }
-                </select>
-              </div>
+            <div className="control has-icons-left">
+              <input
+                type="text"
+                className="input"
+                placeholder="Search for an artist"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <span className="icon is-small is-left">
+                <Search />
+              </span>
             </div>
+            {searchTerm && !selectedArtist && (
+              <div className="search-results">
+                {filteredArtists.map(artist => (
+                  <div 
+                    key={artist._id} 
+                    className="search-result-item"
+                    onClick={() => handleSelectArtist(artist)}
+                  >
+                    {artist.name}
+                  </div>
+                ))}
+              </div>
+            )}
+            {selectedArtist && (
+              <div className="selected-artist">
+                Selected: {artists.find(a => a._id === selectedArtist)?.name}
+              </div>
+            )}
+            {errorData.artist && (
+              <small className="has-text-danger">{errorData.artist}</small>
+            )}
           </div>
-
-          {selectedArtist === "new" && (
-            <div className="field">
-              <label htmlFor="newArtist" className="label">New Artist Name</label>
-              <div className="control">
-                <input
-                  type="text"
-                  className="input"
-                  name="artist"
-                  value={formData.artist}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          )}
 
           {errorData.artist && (
             <small className="has-text-danger">{errorData.artist}</small>
@@ -258,7 +281,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
             </div>
           </div><br/>
 
-          <button className="button is-primary" type="submit">
+          <button className="button is-warning" type="submit">
             Submit
           </button>
         </form>

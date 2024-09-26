@@ -1,0 +1,52 @@
+.hero.is-darkest {
+    background: linear-gradient(-45deg,
+      #d2b73f, 
+      #434343,
+      #262626,
+      #1a1a1a,
+      #000000
+    );
+    background-size: 400% 400%;
+    animation: gradientMove 20s ease infinite;
+  }
+  
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .home-subtitle {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); 
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease forwards;
+    animation-delay: 0.5s;
+    font-size: larger;
+  }
+  
+  .button.is-warning {
+    background-color: #fec302;
+    color: #000000;
+    transition: all 0.3s ease;
+  }
+  
+  .button.is-warning:hover {
+    background-color: #ffdd57;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(254, 195, 2, 0.5);
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

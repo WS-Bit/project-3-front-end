@@ -7,6 +7,7 @@ interface EditReviewProps {
   handleEditReviewChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleUpdateReview: (e: React.FormEvent, reviewId: string) => Promise<void>;
   setEditingReview: (reviewId: string | null) => void;
+  handleStarClick: (rating: number) => void;
 }
 
 const EditReview = ({
@@ -15,22 +16,22 @@ const EditReview = ({
   handleEditReviewChange,
   handleUpdateReview,
   setEditingReview,
+  handleStarClick,
 }: EditReviewProps) => {
   return (
     <form onSubmit={(e) => handleUpdateReview(e, review._id)}>
       <div className="field">
         <label className="label">Rating</label>
         <div className="control">
-          <input
-            className="input"
-            type="number"
-            name="stars"
-            min="1"
-            max="5"
-            value={editReviewForm.stars || ""}
-            onChange={handleEditReviewChange}
-            required
-          />
+          {[1, 2, 3, 4, 5].map((star) => (
+            <span
+              key={star}
+              onClick={() => handleStarClick(star)}
+              style={{ cursor: 'pointer', fontSize: '1.5em' }}
+            >
+              <i className={`fas fa-star ${star <= (editReviewForm.stars || 0) ? 'has-text-warning' : 'has-text-grey-lighter'}`}></i>
+            </span>
+          ))}
         </div>
       </div>
       <div className="field">

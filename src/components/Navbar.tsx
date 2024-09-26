@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/melody-memo-logo.svg';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Release } from '../interfaces/types';
 import styles from '../styles/Pagination.module.css';
+import NeonLogo from './NeonLogo';
 
 interface User {
   _id: string;
@@ -22,6 +22,7 @@ interface NavbarProps {
 
 const Navbar = ({ user, setUser }: NavbarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isActive, setIsActive] = useState(false);
 
   function logout() {
@@ -30,19 +31,18 @@ const Navbar = ({ user, setUser }: NavbarProps) => {
     navigate('/');
   }
 
+  const isHomePage = location.pathname === '/';
+
   return (
     <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
       <div className="container">
         <div className="navbar-brand">
-          <Link to="/" className="navbar-item">
-            <img src={logo} alt="Melody Memo Logo" width="130" height="40" />
-          </Link>
-
+          {!isHomePage && <NeonLogo />}
           <a 
             role="button" 
             className={`navbar-burger burger ${isActive ? 'is-active' : ''}`} 
             aria-label="menu" 
-            aria-expanded="false" 
+            aria-expanded={isActive}
             onClick={() => setIsActive(!isActive)}
           >
             <span aria-hidden="true"></span>

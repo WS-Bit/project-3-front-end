@@ -374,6 +374,14 @@ function ShowRelease({ user }: ShowReleaseProps) {
     }
   };
 
+  const handleStarClick = (rating: number) => {
+    setNewReview(prev => ({ ...prev, stars: rating }));
+  };
+  
+  const handleEditStarClick = (rating: number) => {
+    setEditReviewForm(prev => ({ ...prev, stars: rating }));
+  };
+
   const renderReviews = () => {
     if (!release || !release.reviews) {
       return <p>No reviews yet.</p>;
@@ -398,6 +406,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
             handleEditReviewChange={handleEditReviewChange}
             handleUpdateReview={handleUpdateReview}
             setEditingReview={setEditingReview}
+            handleStarClick={handleEditStarClick}
           />
         ) : (
           <ReviewDetails review={review} user={user} deleteReview={deleteReview} handleEditReview={handleEditReview} />
@@ -501,6 +510,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
                         handleEditReviewChange={handleEditReviewChange}
                         handleUpdateReview={handleUpdateReview}
                         setEditingReview={setEditingReview}
+                        handleStarClick={handleEditStarClick}
                       />
                     ) : (
                       <ReviewDetails 
@@ -555,6 +565,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
                   newReview={newReview} 
                   handleReviewChange={handleReviewChange} 
                   createReview={createReview} 
+                  handleStarClick={handleStarClick}
                 />
               </div>
             )}

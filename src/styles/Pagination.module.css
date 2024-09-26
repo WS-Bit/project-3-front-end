@@ -90,3 +90,22 @@
   background-color: #f39c12;
   color: rgba(0, 0, 0, 0.9);
 }
+
+
+
+.input:focus,
+.textarea:focus,
+.select select:focus {
+  border-color: #ffdd57;
+  box-shadow: 0 0 0 0.125em rgba(255, 221, 87, 0.25);
+}
+
+/* Dropdown styles */
+.select:not(.is-multiple):not(.is-loading)::after {
+  border-color: #ffdd57;
+}
+
+.select:not(.is-multiple):not(.is-loading):hover::after {
+  border-color: #f39c12;
+}
+

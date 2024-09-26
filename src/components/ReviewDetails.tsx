@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { User, Review } from "../interfaces/types";
 import styles from '../styles/Pagination.module.css';
@@ -11,11 +11,16 @@ interface ReviewDetailsProps {
 }
 
 const ReviewDetails = ({ review, user, deleteReview, handleEditReview }: ReviewDetailsProps) => {
+  const renderStars = (rating: number) => {
+    return Array(5).fill(0).map((_, i) => (
+      <i key={i} className={`fas fa-star ${i < rating ? 'has-text-warning' : 'has-text-grey-lighter'}`}></i>
+    ));
+  };
 
   return (
     <>
       <p>
-        <strong>Rating:</strong> {review.stars}/5
+        <strong>Rating:</strong> {renderStars(review.stars)}
       </p>
       {review.favouriteTrack && (
         <p>
