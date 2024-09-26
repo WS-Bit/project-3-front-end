@@ -83,7 +83,7 @@ function Login({ fetchUser }: LoginProps) {
           <button className="button is-primary" type="submit">
             Login
           </button>
-        </form><br/>
+        </form>
         <Link to="/forgot-password" className={styles.yellowLink}>Forgot Password?</Link>
       </div>
     </div>

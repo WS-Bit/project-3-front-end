@@ -10,8 +10,8 @@ interface NeonLogoProps {
 const NeonLogo = ({ size = 'small', isLink = true }: NeonLogoProps): React.ReactElement => {
   const logoContent = (
     <div className={`neon-logo ${size}`}>
-      <span className="neon-text">Melody</span>
-      <span className="neon-text">Memo</span>
+      <span className="neon-text">MELODY</span>
+      <span className="neon-text">MEMO</span>
     </div>
   );
 
