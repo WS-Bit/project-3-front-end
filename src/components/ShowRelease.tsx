@@ -7,12 +7,12 @@ import ReleaseForm from "./ReleaseForm";
 import ReleaseDetails from "./ReleaseDetails";
 import ReviewForm from "./ReviewForm";
 import ReviewDetails from "./ReviewDetails";
-import styles from './Pagination.module.css';
+import styles from '../styles/Pagination.module.css';
 
 interface ShowReleaseProps {
   user: User | null;
   isFavourite?: boolean;
-  toggleFavorite?: () => void; 
+  toggleFavourite?: () => void; 
 }
 
 function ShowRelease({ user }: ShowReleaseProps) {
@@ -31,7 +31,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
   const [editingReview, setEditingReview] = useState<string | null>(null);
   const [editReviewForm, setEditReviewForm] = useState<Partial<Review>>({});
   const [isFavourite, setIsFavourite] = useState(false);
-  const [favouriteError, setFavoriteError] = useState<string | null>(null);
+  const [favouriteError, setFavouriteError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
   const { releaseId } = useParams<{ releaseId?: string }>();
@@ -50,7 +50,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
 
   useEffect(() => {
     if (user && release) {
-      checkIfFavorite();
+      checkIfFavourite();
     }
   }, [user, release]);
 
@@ -240,7 +240,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     }
   }
 
-  async function checkIfFavorite() {
+  async function checkIfFavourite() {
     if (!user || !release) return;
     try {
       const token = getToken();
@@ -249,14 +249,14 @@ function ShowRelease({ user }: ShowReleaseProps) {
       });
       setIsFavourite(response.data.some((fav: Release) => fav._id === release._id));
     } catch (error) {
-      console.error("Error checking favorite status:", error);
+      console.error("Error checking favourite status:", error);
     }
   }
 
-  async function toggleFavorite() {
+  async function toggleFavourite() {
     if (!user || !release) return;
     try {
-      setFavoriteError(null);
+      setFavouriteError(null);
       const token = getToken();
       const endpoint = `/api/user/${user._id}/favourites/${release._id}`;
       const method = isFavourite ? 'delete' : 'post';
@@ -274,19 +274,19 @@ function ShowRelease({ user }: ShowReleaseProps) {
       
       setIsFavourite(!isFavourite);
     } catch (error: unknown) {
-      console.error("Error toggling favorite:", error);
+      console.error("Error toggling favourite:", error);
       if (axios.isAxiosError(error)) {
         console.error("Error details:", error.response?.data);
         console.error("Status code:", error.response?.status);
         if (error.response?.status === 401) {
-          setFavoriteError("You are not authorized. Please log in again.");
+          setFavouriteError("You are not authorized. Please log in again.");
         } else {
-          setFavoriteError(`Failed to update favorite status: ${error.response?.data?.message || error.message}`);
+          setFavouriteError(`Failed to update favourite status: ${error.response?.data?.message || error.message}`);
         }
       } else if (error instanceof Error) {
-        setFavoriteError(`An error occurred: ${error.message}`);
+        setFavouriteError(`An error occurred: ${error.message}`);
       } else {
-        setFavoriteError("An unexpected error occurred. Please try again later.");
+        setFavouriteError("An unexpected error occurred. Please try again later.");
       }
     }
   }
@@ -440,8 +440,8 @@ function ShowRelease({ user }: ShowReleaseProps) {
     <section className="section">
       <div className="container">
         <div className="columns">
-          <div className="column is-one-third">
-            <figure className="image is-square">
+          <div className="column is-one-third"> 
+            <figure className={`image is-square ${styles.releaseBox}`}>
               <img src={release.image} alt={release.title} style={{ objectFit: "cover" }} />
             </figure>
           </div>
@@ -463,14 +463,14 @@ function ShowRelease({ user }: ShowReleaseProps) {
                     {user && (
                       <div className="field">
                         <input 
-                          id="favoriteSwitch" 
+                          id="favouriteSwitch" 
                           type="checkbox" 
-                          name="favoriteSwitch" 
+                          name="favouriteSwitch" 
                           className="switch is-rounded is-warning"
                           checked={isFavourite}
-                          onChange={toggleFavorite}
+                          onChange={toggleFavourite}
                         />
-                        <label htmlFor="favoriteSwitch">Favorite</label>
+                        <label htmlFor="favouriteSwitch">Favourite</label>
                       </div>
                     )}
                   {favouriteError && <p className="has-text-danger">{favouriteError}</p>}
@@ -512,37 +512,37 @@ function ShowRelease({ user }: ShowReleaseProps) {
                     )}
                   </div>
                 ))}
-                <nav className="pagination is-centered mt-4" role="navigation" aria-label="pagination">
-                  <button
-                    className="pagination-previous"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </button>
-                  <button
-                    className="pagination-next"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </button>
-                  <ul className="pagination-list">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <li key={page}>
-                        <button
-                          className={`pagination-link ${styles.yellowPagination} ${
-                            currentPage === page ? 'is-current' : ''
-                          }`}
-                          aria-label={`Go to page ${page}`}
-                          onClick={() => handlePageChange(page)}
-                        >
-                          {page}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
+                <nav className="pagination is-centered mt-6" role="navigation" aria-label="pagination">
+              <button
+                className={`pagination-previous ${styles.yellowPagination}`}
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                className={`pagination-next ${styles.yellowPagination}`}
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+              <ul className="pagination-list">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <li key={page}>
+                    <button
+                      className={`pagination-link ${styles.yellowPagination} ${
+                        currentPage === page ? styles.isCurrent : ''
+                      }`}
+                      aria-label={`Go to page ${page}`}
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
               </>
             ) : (
               <p>No reviews yet.</p>

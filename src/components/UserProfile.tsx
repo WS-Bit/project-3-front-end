@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { User, Release, Artist, ProfileUser } from '../interfaces/types';
-import styles from './Pagination.module.css';
+import styles from '../styles/Pagination.module.css';
 
 interface UserProfileProps {
   user: User | null;
@@ -227,7 +227,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
                 Previous
               </button>
               <button
-                className={`pagination-next ${styles.yellowPagination}`} 
+                className={`pagination-next ${styles.yellowPagination}`}
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
@@ -238,7 +238,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
                   <li key={page}>
                     <button
                       className={`pagination-link ${styles.yellowPagination} ${
-                        currentPage === page ? 'is-current' : ''
+                        currentPage === page ? styles.isCurrent : ''
                       }`}
                       aria-label={`Go to page ${page}`}
                       onClick={() => handlePageChange(page)}

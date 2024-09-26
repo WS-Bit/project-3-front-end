@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { User, Artist, Release } from "../interfaces/types";
-import styles from './Pagination.module.css';
+import styles from '../styles/Pagination.module.css';
 
 interface ShowArtistProps {
   user: User | null;

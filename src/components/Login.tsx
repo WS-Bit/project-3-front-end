@@ -1,6 +1,7 @@
 import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
+import styles from '../styles/Pagination.module.css';
 
 interface LoginProps {
   fetchUser: () => Promise<void>;
@@ -83,6 +84,7 @@ function Login({ fetchUser }: LoginProps) {
             Login
           </button>
         </form>
+        <Link to="/forgot-password" className={styles.yellowLink}>Forgot Password?</Link>
       </div>
     </div>
   );

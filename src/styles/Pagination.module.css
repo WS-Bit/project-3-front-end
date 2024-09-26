@@ -1,0 +1,92 @@
+/* Pagination Styles */
+.yellowPagination {
+  background-color: transparent;
+  border-color: #d3d3d3;
+  color: #4a4a4a;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.yellowPagination:hover {
+  background-color: #f39c12;
+  border-color: #ffce00;
+  color: rgb(0, 0, 0);
+}
+
+.yellowPagination.isCurrent {
+  background-color: #ffc62b !important;
+  border-color: #f39c12 !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Link Styles */
+.yellowLink {
+  color: #ffdd57;
+  transition: color 0.3s ease;
+}
+
+.yellowLink:hover {
+  color: #da9010;
+}
+
+/* Box Styles */
+.releaseBox {
+  border: 1px solid #ffdd57;
+  transition: box-shadow 0.3s ease;
+}
+
+.releaseBox:hover {
+  box-shadow: 0 0 15px rgba(217, 189, 3, 0.803);
+}
+
+/* Global Styles */
+:global(.pagination-previous),
+:global(.pagination-next) {
+  background-color: transparent;
+  border-color: #dbdbdb;
+  color: #ffffff;
+}
+
+:global(.pagination-previous:hover),
+:global(.pagination-next:hover) {
+  background-color: #f39c12;
+  border-color: #ffce00;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+:global(.tabs a) {
+  color: #ffdd57 !important; 
+}
+
+:global(.tabs li.is-active a) {
+  color: #ffdd57 !important;
+  border-bottom-color: #ffce00 !important;
+}
+
+/* Navbar Styles */
+:global(.navbar-item),
+:global(.navbar-link) {
+  color: #ffdd57 !important;
+}
+
+:global(.navbar-item:hover),
+:global(.navbar-link:hover) {
+  background-color: rgba(255, 221, 87, 0.1) !important;
+  color: #f39c12 !important;
+}
+
+:global(.navbar-item.is-active),
+:global(.navbar-link.is-active) {
+  background-color: rgba(255, 221, 87, 0.2) !important;
+  color: #f39c12 !important;
+}
+
+/* Ensure yellow styling for all relevant components */
+:global(.button.is-primary) {
+  background-color: #ffdd57;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+:global(.button.is-primary:hover) {
+  background-color: #f39c12;
+  color: rgba(0, 0, 0, 0.9);
+}

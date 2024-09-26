@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Release, Artist } from '../interfaces/types';
 import ReleaseCard from './ReleaseCard';
-import styles from './Pagination.module.css';
+import styles from '../styles/Pagination.module.css';
 
 type SortOption = 'titleAZ' | 'artistAZ' | 'genreAZ' | 'yearDesc';
 
@@ -139,14 +139,14 @@ function ReleasesList() {
         </div>
         <nav className="pagination is-centered mt-6" role="navigation" aria-label="pagination">
           <button
-            className="pagination-previous is-warning"
+            className={`pagination-previous ${styles.yellowPagination}`}
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
             Previous
           </button>
           <button
-            className="pagination-next is-warning"
+            className={`pagination-next ${styles.yellowPagination}`}
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
           >
@@ -157,7 +157,7 @@ function ReleasesList() {
               <li key={page}>
                 <button
                   className={`pagination-link ${styles.yellowPagination} ${
-                    currentPage === page ? 'is-current' : ''
+                    currentPage === page ? styles.isCurrent : ''
                   }`}
                   aria-label={`Go to page ${page}`}
                   onClick={() => handlePageChange(page)}

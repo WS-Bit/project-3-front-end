@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { User, Review } from "../interfaces/types";
-import styles from './Pagination.module.css';
+import styles from '../styles/Pagination.module.css';
 
 interface ReviewDetailsProps {
   review: Review;

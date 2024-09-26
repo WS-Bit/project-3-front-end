@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Release, Artist } from '../interfaces/types';
-import styles from './Pagination.module.css';
+import styles from '../styles/Pagination.module.css';
 
 interface ReleaseDetailsProps {
   release: Release;

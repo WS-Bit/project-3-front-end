@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import CreateRelease from "./components/CreateRelease";
 import CreateArtist from "./components/CreateArtist";
 import UserProfile from "./components/UserProfile";
+import { ResetPassword, ForgotPassword } from "./components/PasswordManagement";
 
 import { Release } from "./interfaces/types";
 
@@ -89,6 +90,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login fetchUser={fetchUser} />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
           <Route path="/releases" element={<ReleaseList />} />
           <Route path="/artists" element={<ArtistsList />} />
           <Route path="/releases/new" element={<CreateRelease user={user} />} />
