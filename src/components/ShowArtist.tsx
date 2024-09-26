@@ -339,36 +339,36 @@ function ShowArtist({ user }: ShowArtistProps) {
             </div>
 
             <nav className="pagination is-centered mt-6" role="navigation" aria-label="pagination">
-              <button
-                className="pagination-previous is-warning"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <button
-                className="pagination-next is-warning"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-              <ul className="pagination-list">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <li key={page}>
-                    <button
-                      className={`pagination-link ${styles.yellowPagination} ${
-                        currentPage === page ? 'is-current' : ''
-                      }`}
-                      aria-label={`Go to page ${page}`}
-                      onClick={() => handlePageChange(page)}
-                    >
-                      {page}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+          <button
+            className={`pagination-previous ${styles.yellowPagination}`}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <button
+            className={`pagination-next ${styles.yellowPagination}`}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+          <ul className="pagination-list">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <li key={page}>
+                <button
+                  className={`pagination-link ${styles.yellowPagination} ${
+                    currentPage === page ? styles.isCurrent : ''
+                  }`}
+                  aria-label={`Go to page ${page}`}
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
           </>
         ) : (
           <p>No releases yet.</p>

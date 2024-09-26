@@ -50,7 +50,7 @@
 :global(.pagination-next:hover) {
   background-color: #f39c12;
   border-color: #ffce00;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgb(255, 255, 255);
 }
 
 :global(.tabs a) {

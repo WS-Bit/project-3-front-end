@@ -1,26 +1,85 @@
 .hero.is-darkest {
-    background: linear-gradient(-45deg,
-      #d2b73f, 
-      #434343,
-      #262626,
-      #1a1a1a,
-      #000000
-    );
-    background-size: 400% 400%;
-    animation: gradientMove 20s ease infinite;
+  background: linear-gradient(
+    -45deg,
+    #575757 0%,
+    #4a4a4a 10%,
+    #3d3d3d 20%,
+    #303030 30%,
+    #262626 40%,
+    #1a1a1a 50%,
+    #0d0d0d 60%,
+    #000000 70%,
+    #0d0d0d 80%,
+    #1a1a1a 90%,
+    #262626 100%
+  );
+  background-size: 400% 400%;
+  animation: smoothMarbleSwirl 30s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero.is-darkest::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255,255,255,0.05) 0%,
+    rgba(255,255,255,0.03) 25%,
+    rgba(255,255,255,0.02) 50%,
+    rgba(255,255,255,0) 70%
+  );
+  animation: smoothShimmer 40s linear infinite;
+}
+
+@keyframes smoothMarbleSwirl {
+  0%, 100% {
+    background-position: 0% 50%;
   }
-  
-  @keyframes gradientMove {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+  25% {
+    background-position: 50% 25%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 75%;
+  }
+}
+
+@keyframes smoothShimmer {
+  0% {
+    transform: translate(-25%, -25%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-25%, -25%) rotate(360deg);
+  }
+}
+
+@keyframes marbleSwirl {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
   
   .home-subtitle {
     color: #ffffff !important;

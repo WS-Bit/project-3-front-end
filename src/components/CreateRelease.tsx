@@ -10,8 +10,30 @@ interface CreateReleaseProps {
   user: User | null;
 }
 
+interface FormData {
+  title: string;
+  image: string;
+  artist: string;
+  year: string;
+  genre: string;
+  trackList: string;
+  releaseType: string;
+  user: string;
+}
+
+interface ErrorData {
+  title: string;
+  image: string;
+  artist: string;
+  year: string;
+  genre: string;
+  trackList: string;
+  releaseType: string;
+  user: string;
+}
+
 function CreateRelease({ user }: CreateReleaseProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     image: "",
     artist: "",
@@ -22,7 +44,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
     user: user?._id || ""
   });
 
-  const [errorData, setErrorData] = useState({
+  const [errorData, setErrorData] = useState<ErrorData>({
     title: "",
     image: "",
     artist: "",
@@ -30,15 +52,16 @@ function CreateRelease({ user }: CreateReleaseProps) {
     genre: "",
     trackList: "",
     releaseType: "",
-    user: user?._id || ""
+    user: ""
   });
 
   const [artists, setArtists] = useState<Artist[]>([]);
   const [selectedArtist, setSelectedArtist] = useState("");
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredArtists, setFilteredArtists] = useState<Artist[]>([]);
+  const [formValid, setFormValid] = useState(false);
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     async function fetchArtists() {
@@ -60,6 +83,10 @@ function CreateRelease({ user }: CreateReleaseProps) {
     setFilteredArtists(results);
   }, [searchTerm, artists]);
 
+  useEffect(() => {
+    validateForm();
+  }, [formData, selectedArtist]);
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
     setSelectedArtist("");
@@ -71,13 +98,11 @@ function CreateRelease({ user }: CreateReleaseProps) {
     setFormData(prevData => ({ ...prevData, artist: artist._id }));
   };
 
-
   function formatTrackList(tracks: string): string {
     return tracks
       .split('\n')
       .filter(track => track.trim() !== '')
       .map((track, index) => {
-        
         if (/^\d+\.?\s/.test(track.trim())) {
           return track.trim(); 
         } else {
@@ -87,8 +112,42 @@ function CreateRelease({ user }: CreateReleaseProps) {
       .join('\n');
   }
 
+  function validateForm() {
+    const newErrorData: ErrorData = {
+      title: "",
+      image: "",
+      artist: "",
+      year: "",
+      genre: "",
+      trackList: "",
+      releaseType: "",
+      user: ""
+    };
+    let isValid = true;
+
+    (Object.keys(formData) as Array<keyof FormData>).forEach((key) => {
+      if (key !== 'user' && key !== 'image' && !formData[key].trim()) {
+        newErrorData[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required`;
+        isValid = false;
+      }
+    });
+
+    if (!selectedArtist && !formData.artist) {
+      newErrorData.artist = "Artist is required";
+      isValid = false;
+    }
+
+    setErrorData(newErrorData);
+    setFormValid(isValid);
+  }
+
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
+    setAttemptedSubmit(true);
+  
+    if (!formValid) {
+      return;
+    }
   
     try {
       const token = localStorage.getItem("token");
@@ -111,22 +170,15 @@ function CreateRelease({ user }: CreateReleaseProps) {
       localStorage.setItem('newReleaseAdded', 'true');
       navigate(`/artists/${selectedArtist || response.data.artist}`);
     } catch (error: any) {
-      setErrorData(error.response.data.errors || {});
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorData(prevErrors => ({ ...prevErrors, ...error.response.data.errors }));
+      }
     }
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
-  }
-
-  function handleArtistChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    setSelectedArtist(e.target.value);
-    if (e.target.value === "new") {
-      setFormData(prevData => ({ ...prevData, artist: "" }));
-    } else {
-      setFormData(prevData => ({ ...prevData, artist: e.target.value }));
-    }
   }
 
   if (!user) {
@@ -137,18 +189,17 @@ function CreateRelease({ user }: CreateReleaseProps) {
     <div className="section">
       <div className="container">
         <form onSubmit={handleSubmit}>
-
           <div className="field">
             <label htmlFor="title" className="label">Release Title</label>
             <div className="control">
               <input
                 type="text"
-                className="input"
+                className={`input ${attemptedSubmit && errorData.title ? 'is-danger' : ''}`}
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
               />
-              {errorData.title && (
+              {attemptedSubmit && errorData.title && (
                 <small className="has-text-danger">{errorData.title}</small>
               )}
             </div>
@@ -164,9 +215,6 @@ function CreateRelease({ user }: CreateReleaseProps) {
                 value={formData.image}
                 onChange={handleChange}
               />
-              {errorData.image && (
-                <small className="has-text-danger">{errorData.image}</small>
-              )}
             </div>
           </div>
 
@@ -176,7 +224,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
             <div className="control has-icons-left">
               <input
                 type="text"
-                className="input"
+                className={`input ${attemptedSubmit && errorData.artist ? 'is-danger' : ''}`}
                 placeholder="Search for an artist"
                 value={searchTerm}
                 onChange={handleSearchChange}
@@ -203,26 +251,22 @@ function CreateRelease({ user }: CreateReleaseProps) {
                 Selected: {artists.find(a => a._id === selectedArtist)?.name}
               </div>
             )}
-            {errorData.artist && (
+            {attemptedSubmit && errorData.artist && (
               <small className="has-text-danger">{errorData.artist}</small>
             )}
           </div>
-
-          {errorData.artist && (
-            <small className="has-text-danger">{errorData.artist}</small>
-          )}
 
           <div className="field">
             <label htmlFor="year" className="label">Year</label>
             <div className="control">
               <input
                 type="number"
-                className="input"
+                className={`input ${attemptedSubmit && errorData.year ? 'is-danger' : ''}`}
                 name="year"
                 value={formData.year}
                 onChange={handleChange}
               />
-              {errorData.year && (
+              {attemptedSubmit && errorData.year && (
                 <small className="has-text-danger">{errorData.year}</small>
               )}
             </div>
@@ -233,12 +277,12 @@ function CreateRelease({ user }: CreateReleaseProps) {
             <div className="control">
               <input
                 type="text"
-                className="input"
+                className={`input ${attemptedSubmit && errorData.genre ? 'is-danger' : ''}`}
                 name="genre"
                 value={formData.genre}
                 onChange={handleChange}
               />
-              {errorData.genre && (
+              {attemptedSubmit && errorData.genre && (
                 <small className="has-text-danger">{errorData.genre}</small>
               )}
             </div>
@@ -248,13 +292,13 @@ function CreateRelease({ user }: CreateReleaseProps) {
             <label htmlFor="trackList" className="label">Track List</label>
             <div className="control">
               <textarea
-                className="textarea"
+                className={`textarea ${attemptedSubmit && errorData.trackList ? 'is-danger' : ''}`}
                 name="trackList"
                 value={formData.trackList}
                 onChange={handleChange}
                 placeholder="Enter track list (one track per line)"
               />
-              {errorData.trackList && (
+              {attemptedSubmit && errorData.trackList && (
                 <small className="has-text-danger">{errorData.trackList}</small>
               )}
             </div>
@@ -268,6 +312,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
                   name="releaseType"
                   value={formData.releaseType}
                   onChange={handleChange}
+                  className={attemptedSubmit && errorData.releaseType ? 'is-danger' : ''}
                 >
                   <option value="Single">Single</option>
                   <option value="Album">Album</option>
@@ -275,7 +320,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
                   <option value="Mixtape">Mixtape</option>
                 </select>
               </div>
-              {errorData.releaseType && (
+              {attemptedSubmit && errorData.releaseType && (
                 <small className="has-text-danger">{errorData.releaseType}</small>
               )}
             </div>

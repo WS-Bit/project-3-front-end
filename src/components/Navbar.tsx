@@ -34,7 +34,7 @@ const Navbar = ({ user, setUser }: NavbarProps) => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
+    <nav className="navbar is-black" role="navigation" aria-label="main navigation">
       <div className="container">
         <div className="navbar-brand">
           {!isHomePage && <NeonLogo />}
@@ -53,7 +53,6 @@ const Navbar = ({ user, setUser }: NavbarProps) => {
 
         <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
           <div className="navbar-start">
-            <Link to="/" className={`navbar-item ${styles.yellowLink}`}>Home</Link>
             <Link to="/releases" className={`navbar-item ${styles.yellowLink}`}>All Releases</Link>
             <Link to="/artists" className={`navbar-item ${styles.yellowLink}`}>All Artists</Link>
           </div>
