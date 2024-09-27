@@ -4,6 +4,7 @@ import axios from "axios";
 import { User, Artist, Release } from "../../interfaces/types";
 import styles from '../../styles/Pagination.module.css';
 import { baseUrl } from "../../config";
+import FancyLoading from "../FancyLoading";
 
 interface ShowArtistProps {
   user: User | null;
@@ -151,7 +152,13 @@ function ShowArtist({ user }: ShowArtistProps) {
   }
 
   if (loading) {
-    return <div className="section"><div className="container"><p>Loading artist details...</p></div></div>;
+    return (
+      <div className="section">
+        <div className="container">
+          <FancyLoading />
+        </div>
+      </div>
+    );
   }
 
   if (error) {

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { User, Release, Artist, ProfileUser } from '../../interfaces/types';
 import styles from '../../styles/Pagination.module.css';
 import { baseUrl } from '../../config';
+import FancyLoading from '../FancyLoading';
 
 interface UserProfileProps {
   user: User | null;
@@ -123,8 +124,8 @@ const UserProfile = ({ user }: UserProfileProps) => {
     setCurrentPage(newPage);
   };
 
-  if (loading) {
-    return <div className="section"><div className="container"><p>Loading user profile...</p></div></div>;
+  {
+    return <FancyLoading />;
   }
 
   if (error) {

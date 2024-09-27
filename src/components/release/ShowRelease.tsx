@@ -9,6 +9,7 @@ import ReviewForm from "../review/ReviewForm";
 import ReviewDetails from "./ReviewDetails";
 import styles from '../../styles/Pagination.module.css';
 import { baseUrl } from "../../config";
+import FancyLoading from "../FancyLoading";
 
 interface ShowReleaseProps {
   user: User | null;
@@ -420,7 +421,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     return (
       <div className="section">
         <div className="container">
-          <p>Loading release details...</p>
+          <FancyLoading />
         </div>
       </div>
     );

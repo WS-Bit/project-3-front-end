@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import { Release, Artist } from '../../interfaces/types';
 import ReleaseCard from './ReleaseCard';
 import styles from '../../styles/Pagination.module.css';
-import loadingStyles from '../../styles/LoadingAnimation.module.css';
+import FancyLoading from '../FancyLoading';
 import { baseUrl } from '../../config';
+import { Fan } from 'lucide-react';
 
 type SortOption = 'titleAZ' | 'artistAZ' | 'genreAZ' | 'yearDesc';
 
@@ -91,15 +92,7 @@ function ReleasesList() {
   };
 
   if (loading) {
-    return (
-      <div className="section">
-        <div className="container">
-          <div className={loadingStyles.loadingContainer}>
-            <div className={loadingStyles.loadingCircle}></div>
-          </div>
-        </div>
-      </div>
-    );
+    return <FancyLoading />;
   }
 
   if (error) {
