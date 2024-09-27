@@ -21,7 +21,6 @@ function ShowArtist({ user }: ShowArtistProps) {
   const { artistId } = useParams<{ artistId?: string }>();
   const navigate = useNavigate();
 
-  // New state for releases filtering, sorting, and pagination
   const [sortOption, setSortOption] = useState<SortOption>('yearDesc');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -169,7 +168,6 @@ function ShowArtist({ user }: ShowArtistProps) {
     return <div className="section"><div className="container"><p>Artist not found.</p></div></div>;
   }
 
-  // Pagination logic
   const indexOfLastRelease = currentPage * releasesPerPage;
   const indexOfFirstRelease = indexOfLastRelease - releasesPerPage;
   const currentReleases = filteredAndSortedReleases.slice(indexOfFirstRelease, indexOfLastRelease);

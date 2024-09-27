@@ -265,7 +265,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
       
       await axios[method](
         endpoint,
-        {}, // empty body for both POST and DELETE
+        {}, 
         {
           headers: { 
             Authorization: `Bearer ${token}`,

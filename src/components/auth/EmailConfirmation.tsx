@@ -13,7 +13,7 @@ function EmailConfirmation() {
       try {
         const response = await axios.get(`${baseUrl}/confirm-email/${token}`);
         setMessage(response.data.message);
-        setTimeout(() => navigate('/login'), 3000); // Redirect to login after 3 seconds
+        setTimeout(() => navigate('/login'), 3000); 
       } catch (error: any) {
         if (error.response && error.response.data) {
           setMessage(error.response.data.message || 'An error occurred during email confirmation.');

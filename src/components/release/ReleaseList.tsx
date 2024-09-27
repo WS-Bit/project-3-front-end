@@ -44,7 +44,6 @@ function ReleasesList() {
   const filteredAndSortedReleases = useMemo(() => {
     let result = [...releases];
 
-    // Filter based on search term
     if (searchTerm) {
       result = result.filter((release) => 
         release.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -55,7 +54,6 @@ function ReleasesList() {
       );
     }
 
-    // Sort based on selected option
     result.sort((a, b) => {
       switch (sortOption) {
         case 'titleAZ':
@@ -80,7 +78,7 @@ function ReleasesList() {
     return result;
   }, [releases, artists, searchTerm, sortOption]);
 
-  // Pagination logic
+ 
   const indexOfLastRelease = currentPage * releasesPerPage;
   const indexOfFirstRelease = indexOfLastRelease - releasesPerPage;
   const currentReleases = filteredAndSortedReleases.slice(indexOfFirstRelease, indexOfLastRelease);

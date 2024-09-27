@@ -89,7 +89,7 @@ export const ResetPassword = () => {
 
       setMessage(response.data.message);
       setIsError(false);
-      setTimeout(() => navigate('/login'), 3000); // Redirect to login after 3 seconds
+      setTimeout(() => navigate('/login'), 3000); 
     } catch (error: AxiosError | any) {
       if (error && error.response) {
         setMessage(error.response.data.message || 'An error occurred');

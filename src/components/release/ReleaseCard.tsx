@@ -8,7 +8,7 @@ interface ReleaseCardProps {
 
 function ReleaseCard({ release, artists }: ReleaseCardProps) {
   const titleRef = useRef<HTMLParagraphElement>(null);
-  const [titleFontSize, setTitleFontSize] = useState(16); // Starting font size
+  const [titleFontSize, setTitleFontSize] = useState(16); 
 
   const getArtistName = () => {
     if (typeof release.artist === 'string') {
@@ -46,7 +46,7 @@ function ReleaseCard({ release, artists }: ReleaseCardProps) {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
-      maxWidth: '250px', // Set a max width for consistency
+      maxWidth: '250px', 
       margin: '0 auto'
     }}>
       <div style={{ width: '100%', paddingTop: '100%', position: 'relative' }}>
