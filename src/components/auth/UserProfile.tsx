@@ -124,7 +124,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
     setCurrentPage(newPage);
   };
 
-  {
+  if (loading) {
     return <FancyLoading />;
   }
 
