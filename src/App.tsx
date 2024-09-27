@@ -12,9 +12,11 @@ import Login from "./components/auth/Login";
 import CreateRelease from "./components/release/CreateRelease";
 import CreateArtist from "./components/artist/CreateArtist";
 import UserProfile from "./components/auth/UserProfile";
+import FancyLoading from "./components/FancyLoading";
 import { ResetPassword, ForgotPassword } from "./components/PasswordManagement";
 import { Release } from "./interfaces/types";
 import { baseUrl } from "./config";
+
 
 export interface User {
   _id: string;
@@ -79,7 +81,7 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <FancyLoading />;
   }
 
   return (
@@ -98,7 +100,7 @@ function App() {
           <Route path="/artists/new" element={<CreateArtist user={user} />} />
           <Route path="/releases/:releaseId" element={<ShowRelease user={user} />} />
           <Route path="/artists/:artistId" element={<ShowArtist user={user} />} />
-          <Route path="/profile" element={user ? <UserProfile user={user} /> : <div>Loading...</div>} />
+          <Route path="/profile" element={user ? <UserProfile user={user} /> : <FancyLoading />} />
           <Route path="/user/:userId/profile" element={<UserProfile user={user} />} />
         </Routes>
       </div>
