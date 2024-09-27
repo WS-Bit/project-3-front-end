@@ -25,13 +25,9 @@ function Login({ fetchUser }: LoginProps) {
     e.preventDefault();
 
     try {
-      console.log("Attempting login...");
       const response = await axios.post(`${baseUrl}/login`, formData);
-      console.log("Login successful, setting token...");
       localStorage.setItem("token", response.data.token);
-      console.log("Fetching user...");
       await fetchUser();
-      console.log("User fetched, navigating to releases...");
       navigate("/releases"); // Navigate immediately after successful login
     } catch (error: any) {
       console.error("Login error:", error);
