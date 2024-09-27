@@ -20,7 +20,7 @@ function ArtistsList() {
   useEffect(() => {
     async function fetchArtists() {
       try {
-        const response = await axios.get<Artist[]>(`${baseUrl}/artist`);
+        const response = await axios.get<Artist[]>(`${baseUrl}/artists`);
         setArtists(response.data);
         setLoading(false);
       } catch (err) {
