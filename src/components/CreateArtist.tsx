@@ -65,7 +65,7 @@ function CreateArtist({ user }: CreateArtistProps) {
   async function checkArtistName(name: string) {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${baseUrl}artists/check-name/${name}`, {
+      const response = await axios.get(`${baseUrl}/artists/check-name/${name}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNameExists(response.data.exists);

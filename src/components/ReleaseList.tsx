@@ -24,7 +24,7 @@ function ReleasesList() {
         setLoading(true);
         const [releasesResponse, artistsResponse] = await Promise.all([
           axios.get<Release[]>(`${baseUrl}/releases`),
-          axios.get<Artist[]>(`${baseUrl}artists`)
+          axios.get<Artist[]>(`${baseUrl}/artists`)
         ]);
         setReleases(releasesResponse.data);
         setArtists(artistsResponse.data);
