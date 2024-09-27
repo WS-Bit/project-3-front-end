@@ -21,6 +21,7 @@ function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -38,16 +39,26 @@ function Signup() {
 
     try {
       const response = await axios.post(`${baseUrl}/signup`, formData);
-      navigate("/login");
+      setSuccessMessage("Sign up successful! Please check your email to confirm your account.");
+      setErrorData({
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setFormData({
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+      });
+      // setTimeout(() => navigate("/login"), 5000);
     } catch (error: any) {
       console.error("An error occurred during signup:", error);
       if (error.response && error.response.data) {
-        // Check if the error response contains a 'errors' object
         if (error.response.data.errors) {
-          // Update the errorData state with the server-side error messages
           setErrorData(error.response.data.errors);
         } else {
-          // Display a more informative error message to the user
           let errorMessage = "An error occurred during signup. Please try again later.";
           if (error.response.data.message) {
             errorMessage = `Error: ${error.response.data.message}`;
@@ -55,10 +66,7 @@ function Signup() {
           alert(errorMessage);
         }
       } else {
-        // Log the entire error object to the console
         console.error("Error details:", error);
-  
-        // Display a generic error message to the user
         alert("An error occurred during signup. Please try again later.");
       }
     }
@@ -68,14 +76,18 @@ function Signup() {
     setShowPassword(!showPassword);
   };
 
-const toggleConfirmPasswordVisibility = () => {
+  const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
-
 
   return (
     <div className="section">
       <div className="container">
+        {successMessage && (
+          <div className="notification is-success">
+            {successMessage}
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="field">
             <label htmlFor="username" className="label">

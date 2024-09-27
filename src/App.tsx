@@ -9,6 +9,7 @@ import ShowRelease from "./components/release/ShowRelease";
 import ShowArtist from "./components/artist/ShowArtist";
 import Signup from "./components/auth/Signup";
 import Login from "./components/auth/Login";
+import EmailConfirmation from "./components/auth/EmailConfirmation";
 import CreateRelease from "./components/release/CreateRelease";
 import CreateArtist from "./components/artist/CreateArtist";
 import UserProfile from "./components/auth/UserProfile";
@@ -92,6 +93,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login fetchUser={fetchUser} />} />
+          <Route path="/confirm-email/:token" element={<EmailConfirmation />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
           <Route path="/releases" element={<ReleaseList />} />
