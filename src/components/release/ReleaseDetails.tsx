@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Release, Artist } from '../interfaces/types';
-import styles from '../styles/Pagination.module.css';
-import { baseUrl } from '../config';
+import { Release, Artist } from '../../interfaces/types';
+import styles from '../../styles/Pagination.module.css';
+import { baseUrl } from '../../config';
 
 interface ReleaseDetailsProps {
   release: Release;

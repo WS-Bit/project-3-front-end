@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Release } from '../interfaces/types';
 import styles from '../styles/Pagination.module.css';
-import NeonLogo from './NeonLogo';
+import NeonLogo from './styles/NeonLogo';
 
 interface User {
   _id: string;

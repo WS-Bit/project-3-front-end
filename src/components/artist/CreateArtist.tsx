@@ -1,9 +1,9 @@
 import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { User } from "../interfaces/types";
-import { baseUrl } from "../config";
-import './FormStyles.css';
+import { User } from "../../interfaces/types";
+import { baseUrl } from "../../config";
+import '../styles/FormStyles.css';
 
 interface CreateArtistProps {
   user: User | null;

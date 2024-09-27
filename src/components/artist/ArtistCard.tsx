@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Artist } from '../interfaces/types';
+import { Artist } from '../../interfaces/types';
 
 interface ArtistCardProps {
   artist: Artist;

@@ -1,11 +1,11 @@
 import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { User, Artist } from "../interfaces/types";
+import { User, Artist } from "../../interfaces/types";
 import { Search } from 'lucide-react'
-import { baseUrl } from "../config";
-import './CreateRelease.css';
-import './FormStyles.css';
+import { baseUrl } from "../../config";
+import '../styles/CreateRelease.css';
+import '../styles/FormStyles.css';
 
 interface CreateReleaseProps {
   user: User | null;

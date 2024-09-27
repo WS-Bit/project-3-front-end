@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import NeonLogo from './NeonLogo';
-import './Home.css';
+import NeonLogo from './styles/NeonLogo';
+import './styles/Home.css';
 
 const Home = () => {
   return (

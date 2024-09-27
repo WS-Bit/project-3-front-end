@@ -2,7 +2,7 @@ import { useState, SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Eye, EyeOff } from 'lucide-react';
-import { baseUrl } from "../config";
+import { baseUrl } from "../../config";
 
 function Signup() {
   const [formData, setFormData] = useState({

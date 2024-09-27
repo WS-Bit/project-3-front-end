@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { User, Release, Review, Artist } from "../interfaces/types";
-import EditReview from "./EditReview";
+import { User, Release, Review, Artist } from "../../interfaces/types";
+import EditReview from "../review/EditReview";
 import ReleaseForm from "./ReleaseForm";
 import ReleaseDetails from "./ReleaseDetails";
-import ReviewForm from "./ReviewForm";
+import ReviewForm from "../review/ReviewForm";
 import ReviewDetails from "./ReviewDetails";
-import styles from '../styles/Pagination.module.css';
-import { baseUrl } from "../config";
+import styles from '../../styles/Pagination.module.css';
+import { baseUrl } from "../../config";
 
 interface ShowReleaseProps {
   user: User | null;

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Release, Artist } from '../interfaces/types';
+import { Release, Artist } from '../../interfaces/types';
 
 interface ReleaseCardProps {
   release: Release;

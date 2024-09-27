@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { User, Artist, Release } from "../interfaces/types";
-import styles from '../styles/Pagination.module.css';
-import { baseUrl } from "../config";
+import { User, Artist, Release } from "../../interfaces/types";
+import styles from '../../styles/Pagination.module.css';
+import { baseUrl } from "../../config";
 
 interface ShowArtistProps {
   user: User | null;

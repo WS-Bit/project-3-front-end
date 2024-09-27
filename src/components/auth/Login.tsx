@@ -1,8 +1,8 @@
 import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
-import { baseUrl } from "../config";
+import { baseUrl } from "../../config";
 import { useNavigate, Link } from "react-router-dom"
-import styles from '../styles/Pagination.module.css';
+import styles from '../../styles/Pagination.module.css';
 
 interface LoginProps {
   fetchUser: () => Promise<void>;

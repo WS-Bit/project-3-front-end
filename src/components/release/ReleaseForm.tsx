@@ -1,6 +1,6 @@
 import React from "react";
-import { Release, Artist } from "../interfaces/types";
-import ArtistSelect from "./ArtistSelect";
+import { Release, Artist } from "../../interfaces/types";
+import ArtistSelect from "../artist/ArtistSelect";
 
 interface ReleaseFormProps {
   artists: Artist[];

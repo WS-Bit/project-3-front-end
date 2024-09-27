@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Artist } from '../interfaces/types';
+import { Artist } from '../../interfaces/types';
 
 interface ArtistSelectProps {
   artists: Artist[];

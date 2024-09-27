@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Artist } from '../interfaces/types';
+import { Artist } from '../../interfaces/types';
 import ArtistCard from './ArtistCard';
-import styles from '../styles/Pagination.module.css';
-import loadingStyles from '../styles/LoadingAnimation.module.css';
-import { baseUrl } from '../config';
+import styles from '../../styles/Pagination.module.css';
+import loadingStyles from '../../styles/LoadingAnimation.module.css';
+import { baseUrl } from '../../config';
 
 type SortOption = 'nameAZ' | 'genreAZ';
 
