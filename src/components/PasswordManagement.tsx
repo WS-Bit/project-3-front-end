@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import type { AxiosError } from 'axios'; 
+import { baseUrl } from '../config';
 
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ export const ForgotPassword = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/forgot-password', { email });
+      const response = await axios.post(`${baseUrl}/forgot-password`, { email });
       setMessage(response.data.message);
       setIsError(false);
     } catch (error: any) {
@@ -82,7 +83,7 @@ export const ResetPassword = () => {
 
     try {
       const response = await axios.put<{ message: string }>(
-        `/api/reset-password/${resetToken}`,
+        `${baseUrl}/reset-password/${resetToken}`,
         { password, confirmPassword }
       );
 

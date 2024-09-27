@@ -2,6 +2,7 @@ import { useState, SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Eye, EyeOff } from 'lucide-react';
+import { baseUrl } from "../config";
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -36,7 +37,7 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/signup", formData);
+      const response = await axios.post(`${baseUrl}/signup`, formData);
       navigate("/login");
     } catch (error: any) {
       console.error("An error occurred during signup:", error);

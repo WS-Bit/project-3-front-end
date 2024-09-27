@@ -13,8 +13,8 @@ import CreateRelease from "./components/CreateRelease";
 import CreateArtist from "./components/CreateArtist";
 import UserProfile from "./components/UserProfile";
 import { ResetPassword, ForgotPassword } from "./components/PasswordManagement";
-
 import { Release } from "./interfaces/types";
+import { baseUrl } from "./config";
 
 export interface User {
   _id: string;
@@ -43,7 +43,7 @@ function App() {
     }
     try {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      const response = await axios.get<User>("/api/user");
+      const response = await axios.get<User>(`${baseUrl}/user`);
       setUser(response.data);
       setKey(prevKey => prevKey + 1);
     } catch (error) {

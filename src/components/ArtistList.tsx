@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Artist } from '../interfaces/types';
 import ArtistCard from './ArtistCard';
 import styles from '../styles/Pagination.module.css';
+import { baseUrl } from '../config';
 
 type SortOption = 'nameAZ' | 'genreAZ';
 
@@ -19,7 +20,7 @@ function ArtistsList() {
   useEffect(() => {
     async function fetchArtists() {
       try {
-        const response = await axios.get<Artist[]>('/api/artists');
+        const response = await axios.get<Artist[]>(`${baseUrl}/artist`);
         setArtists(response.data);
         setLoading(false);
       } catch (err) {

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { User, Release, Artist, ProfileUser } from '../interfaces/types';
 import styles from '../styles/Pagination.module.css';
+import { baseUrl } from '../config';
 
 interface UserProfileProps {
   user: User | null;
@@ -37,13 +38,13 @@ const UserProfile = ({ user }: UserProfileProps) => {
         }
     
         const [userResponse, uploadsResponse, favouritesResponse] = await Promise.all([
-          axios.get<ProfileUser>(`/api/user/${userId}/profile`, {
+          axios.get<ProfileUser>(`${baseUrl}/user/${userId}/profile`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get<Release[]>(`/api/user/${userId}/uploads`, {
+          axios.get<Release[]>(`${baseUrl}/user/${userId}/uploads`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get<Release[]>(`/api/user/${userId}/favourites`, {
+          axios.get<Release[]>(`${baseUrl}/user/${userId}/favourites`, {
             headers: { Authorization: `Bearer ${token}` },
           })
         ]);
@@ -57,7 +58,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
           .map((release) => (typeof release.artist === 'string' ? release.artist : release.artist._id))
           .filter((id, index, self) => self.indexOf(id) === index);
 
-        const artistsResponse = await axios.get<Artist[]>(`/api/artists?ids=${artistIds.join(',')}`, {
+        const artistsResponse = await axios.get<Artist[]>(`${baseUrl}/artists?ids=${artistIds.join(',')}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

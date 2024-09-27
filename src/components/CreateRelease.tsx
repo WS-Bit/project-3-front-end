@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { User, Artist } from "../interfaces/types";
 import { Search } from 'lucide-react'
+import { baseUrl } from "../config";
 import './CreateRelease.css';
 import './FormStyles.css';
 
@@ -66,7 +67,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
   useEffect(() => {
     async function fetchArtists() {
       try {
-        const response = await axios.get<Artist[]>('/api/artists');
+        const response = await axios.get<Artist[]>(`${baseUrl}/artists`);
         setArtists(response.data);
       } catch (error) {
         console.error('Error fetching artists:', error);
@@ -157,7 +158,7 @@ function CreateRelease({ user }: CreateReleaseProps) {
         .filter(track => track !== '');
   
       const response = await axios.post(
-        "/api/releases",
+        `${baseUrl}/releases`,
         {
           ...formData,
           trackList: trackListArray,

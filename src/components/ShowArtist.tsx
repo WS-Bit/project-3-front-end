@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { User, Artist, Release } from "../interfaces/types";
 import styles from '../styles/Pagination.module.css';
+import { baseUrl } from "../config";
 
 interface ShowArtistProps {
   user: User | null;
@@ -66,7 +67,7 @@ function ShowArtist({ user }: ShowArtistProps) {
 
     try {
       setLoading(true);
-      const response = await axios.get<Artist>(`/api/artists/${artistId}`);
+      const response = await axios.get<Artist>(`${baseUrl}/artists/${artistId}`);
       
       if (!response.data) {
         throw new Error("No data received from server");
@@ -99,7 +100,7 @@ function ShowArtist({ user }: ShowArtistProps) {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
-      await axios.delete(`/api/artists/${artist._id}`, {
+      await axios.delete(`${baseUrl}/artists/${artist._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/artists");
@@ -122,7 +123,7 @@ function ShowArtist({ user }: ShowArtistProps) {
       };
 
       const response = await axios.put<Artist>(
-        `/api/artists/${artist._id}`,
+        `${baseUrl}/artists/${artist._id}`,
         updateData,
         {
           headers: { Authorization: `Bearer ${token}` },

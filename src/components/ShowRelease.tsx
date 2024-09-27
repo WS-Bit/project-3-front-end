@@ -8,6 +8,7 @@ import ReleaseDetails from "./ReleaseDetails";
 import ReviewForm from "./ReviewForm";
 import ReviewDetails from "./ReviewDetails";
 import styles from '../styles/Pagination.module.css';
+import { baseUrl } from "../config";
 
 interface ShowReleaseProps {
   user: User | null;
@@ -62,7 +63,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     }
   
     try {
-      const response = await axios.get<Release>(`/api/releases/${releaseId}`);
+      const response = await axios.get<Release>(`${baseUrl}/releases/${releaseId}`);
       const fetchedRelease = {
         ...response.data,
         artist: response.data.artist as Artist,
@@ -80,7 +81,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
 
   async function fetchArtists() {
     try {
-      const response = await axios.get<Artist[]>("/api/artists");
+      const response = await axios.get<Artist[]>(`${baseUrl}/artists`);
       setArtists(response.data);
     } catch (error) {
       console.error("Error fetching artists:", error);
@@ -92,7 +93,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     if (!release) return;
     try {
       const token = getToken();
-      await axios.delete(`/api/releases/${release._id}`, {
+      await axios.delete(`${baseUrl}/releases/${release._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/releases");
@@ -115,7 +116,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
       };
 
       const response = await axios.put<Release>(
-        `/api/releases/${release._id}`,
+        `${baseUrl}/releases/${release._id}`,
         updatedRelease,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -143,7 +144,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     try {
       const token = getToken();
       const response = await axios.post<Review>(
-        `/api/releases/${release._id}/reviews`,
+        `${baseUrl}/releases/${release._id}/reviews`,
         newReview,
         {
           headers: {
@@ -185,7 +186,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     if (!release) return;
     try {
       const token = getToken();
-      await axios.delete(`/api/releases/${release._id}/reviews/${reviewId}`, {
+      await axios.delete(`${baseUrl}/releases/${release._id}/reviews/${reviewId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -212,7 +213,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     try {
       const token = getToken();
       const response = await axios.put<Review>(
-        `/api/releases/${release._id}/reviews/${reviewId}`,
+        `${baseUrl}/releases/${release._id}/reviews/${reviewId}`,
         updatedReview,
         {
           headers: {
@@ -244,7 +245,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     if (!user || !release) return;
     try {
       const token = getToken();
-      const response = await axios.get(`/api/user/${user._id}/favourites`, {
+      const response = await axios.get(`${baseUrl}/user/${user._id}/favourites`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setIsFavourite(response.data.some((fav: Release) => fav._id === release._id));
@@ -258,7 +259,7 @@ function ShowRelease({ user }: ShowReleaseProps) {
     try {
       setFavouriteError(null);
       const token = getToken();
-      const endpoint = `/api/user/${user._id}/favourites/${release._id}`;
+      const endpoint = `${baseUrl}/user/${user._id}/favourites/${release._id}`;
       const method = isFavourite ? 'delete' : 'post';
       
       await axios[method](

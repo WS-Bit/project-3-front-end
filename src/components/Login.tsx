@@ -1,5 +1,6 @@
 import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
+import { baseUrl } from "../config";
 import { useNavigate, Link } from "react-router-dom"
 import styles from '../styles/Pagination.module.css';
 
@@ -25,7 +26,7 @@ function Login({ fetchUser }: LoginProps) {
 
     try {
       console.log("Attempting login...");
-      const response = await axios.post("/api/login", formData);
+      const response = await axios.post(`${baseUrl}/login`, formData);
       console.log("Login successful, setting token...");
       localStorage.setItem("token", response.data.token);
       console.log("Fetching user...");

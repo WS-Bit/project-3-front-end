@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Release, Artist } from '../interfaces/types';
 import styles from '../styles/Pagination.module.css';
+import { baseUrl } from '../config';
 
 interface ReleaseDetailsProps {
   release: Release;
@@ -16,7 +17,7 @@ function ReleaseDetails({ release, renderTrackList }: ReleaseDetailsProps) {
     async function fetchArtist() {
       if (typeof release.artist === 'string') {
         try {
-          const response = await axios.get<Artist>(`/api/artists/${release.artist}`);
+          const response = await axios.get<Artist>(`${baseUrl}/artists/${release.artist}`);
           setArtist(response.data);
         } catch (error) {
           console.error("Error fetching artist:", error);

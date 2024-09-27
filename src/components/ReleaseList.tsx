@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Release, Artist } from '../interfaces/types';
 import ReleaseCard from './ReleaseCard';
 import styles from '../styles/Pagination.module.css';
+import { baseUrl } from '../config';
 
 type SortOption = 'titleAZ' | 'artistAZ' | 'genreAZ' | 'yearDesc';
 
@@ -22,8 +23,8 @@ function ReleasesList() {
       try {
         setLoading(true);
         const [releasesResponse, artistsResponse] = await Promise.all([
-          axios.get<Release[]>('/api/releases'),
-          axios.get<Artist[]>('/api/artists')
+          axios.get<Release[]>(`${baseUrl}/releases`),
+          axios.get<Artist[]>(`${baseUrl}artists`)
         ]);
         setReleases(releasesResponse.data);
         setArtists(artistsResponse.data);

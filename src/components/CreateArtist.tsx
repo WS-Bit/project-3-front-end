@@ -2,6 +2,7 @@ import React, { useState, SyntheticEvent, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { User } from "../interfaces/types";
+import { baseUrl } from "../config";
 import './FormStyles.css';
 
 interface CreateArtistProps {
@@ -64,7 +65,7 @@ function CreateArtist({ user }: CreateArtistProps) {
   async function checkArtistName(name: string) {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`/api/artists/check-name/${name}`, {
+      const response = await axios.get(`${baseUrl}artists/check-name/${name}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNameExists(response.data.exists);
@@ -107,7 +108,7 @@ function CreateArtist({ user }: CreateArtistProps) {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "/api/artists",
+        `${baseUrl}/artists`,
         {
           ...formData,
           user: user?._id 
