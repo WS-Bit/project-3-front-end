@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Artist } from '../interfaces/types';
 import ArtistCard from './ArtistCard';
 import styles from '../styles/Pagination.module.css';
+import loadingStyles from '../styles/LoadingAnimation.module.css';
 import { baseUrl } from '../config';
 
 type SortOption = 'nameAZ' | 'genreAZ';
@@ -70,7 +71,15 @@ function ArtistsList() {
   };
 
   if (loading) {
-    return <div className="section"><div className="container"><p>Loading artists...</p></div></div>;
+    return (
+      <div className="section">
+        <div className="container">
+          <div className={loadingStyles.loadingContainer}>
+            <div className={loadingStyles.loadingCircle}></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
