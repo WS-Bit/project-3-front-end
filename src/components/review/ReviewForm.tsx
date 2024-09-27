@@ -1,5 +1,5 @@
 import React from "react";
-import { Review } from "../interfaces/types";
+import { Review } from "../../interfaces/types";
 
 interface ReviewFormProps {
   newReview: Partial<Review>;
