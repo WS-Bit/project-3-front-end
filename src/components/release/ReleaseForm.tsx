@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Release, Artist } from "../../interfaces/types";
-import ArtistSelect from "../artist/ArtistSelect";
+import { Search } from 'lucide-react';
 
 interface ReleaseFormProps {
   artists: Artist[];
@@ -21,6 +21,30 @@ const ReleaseForm: React.FC<ReleaseFormProps> = ({
   updateRelease,
   setIsEditing,
 }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredArtists, setFilteredArtists] = useState<Artist[]>([]);
+  const [selectedArtist, setSelectedArtist] = useState(editForm.artist || "");
+
+  useEffect(() => {
+    const results = artists.filter(artist =>
+      artist.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredArtists(results);
+  }, [searchTerm, artists]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    setSelectedArtist("");
+  };
+
+  const handleSelectArtist = (artist: Artist) => {
+    setSelectedArtist(artist._id);
+    setSearchTerm(artist.name);
+    handleEditChange({
+      target: { name: 'artist', value: artist._id }
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
   return (
     <form onSubmit={updateRelease}>
       <div className="field">
@@ -30,7 +54,40 @@ const ReleaseForm: React.FC<ReleaseFormProps> = ({
         </div>
       </div>
 
-      <ArtistSelect artists={artists} value={(editForm.artist as Artist)?._id || ""} onChange={handleEditChange} />
+      <div className="field">
+        <label htmlFor="artist" className="label">Artist</label>
+        <h3>If Artist is not in the list, please use 'Create Artist'</h3>
+        <div className="control has-icons-left">
+          <input
+            type="text"
+            className="input"
+            placeholder="Search for an artist"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <span className="icon is-small is-left">
+            <Search />
+          </span>
+        </div>
+        {searchTerm && !selectedArtist && (
+          <div className="search-results">
+            {filteredArtists.map(artist => (
+              <div 
+                key={artist._id} 
+                className="search-result-item"
+                onClick={() => handleSelectArtist(artist)}
+              >
+                {artist.name}
+              </div>
+            ))}
+          </div>
+        )}
+        {selectedArtist && (
+          <div className="selected-artist">
+            Selected: {artists.find(a => a._id === selectedArtist)?.name}
+          </div>
+        )}
+      </div>
 
       <div className="field">
         <label className="label">Year</label>
