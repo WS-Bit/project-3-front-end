@@ -224,14 +224,22 @@ function ShowRelease({ user }: ShowReleaseProps) {
         }
       );
 
-      const updatedReviews = Array.isArray(release.reviews)
-        ? release.reviews.map((review) => (review._id === reviewId ? response.data : review))
-        : [response.data];
+      setRelease(prevRelease => {
+        if (!prevRelease) return null;
+        const updatedReviews = Array.isArray(prevRelease.reviews)
+          ? prevRelease.reviews.map(review => 
+              review._id === reviewId ? response.data : review
+            )
+          : [response.data];
 
-      setRelease({
-        ...release,
-        reviews: updatedReviews,
+        return {
+          ...prevRelease,
+          reviews: updatedReviews,
+        };
       });
+
+      setEditingReview(null);
+      setEditReviewForm({});
     } catch (error) {
       console.error("Error updating review:", error);
       if (axios.isAxiosError(error)) {
